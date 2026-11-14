@@ -1,0 +1,46 @@
+{
+  "name": "ecombio-headless",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@base-ui/react": "1.8.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@intercom/messenger-js-sdk": "^0.0.20",
+    "@shopify/checkout-kit": "4.0.0",
+    "@shopify/hydrogen-react": "2026.4.4",
+    "@stripe/stripe-js": "^10.2.1",
+    "@tailwindcss/typography": "^0.5.20",
+    "class-variance-authority": "0.7.1",
+    "cn": "0.3.0",
+    "graphql": "^16.10.0",
+    "graphql-tag": "^2.12.6",
+    "lucide-react": "1.47.0",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "^0.0.1",
+    "sonner": "2.0.8",
+    "tailwindcss": "^4.1.6",
+    "tw-animate-css": "^1.4.0",
+    "use-sync-external-store": "1.7.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.6",
+    "@total-typescript/ts-reset": "^0.6.1",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5.9.3"
+  }
+}

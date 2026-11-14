@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+.env
+.env.local
+.env.*.local
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+
+.open-next
+.wrangler
+.dev.vars
+dev.log
+backups
+search-baseline
