@@ -152,12 +152,12 @@ Re-plan steps: name the trigger → list the options → pick one → update §4
   - Validated: —
 - [~] **P1.6 Prod Worker = BicycleBio on bicyclebio.com**
   - Finding (2026-11-14): workers.dev renders `data-brand="ecombio"` from ecombio.myshopify.com (dev store); `.env.production` holds dev values (1000184544)
-  - [ ] P1.6.1 Worker vars: PUBLIC_STOREFRONT_ID=1000185154, PUBLIC_STORE_DOMAIN=khkkyb-b8.myshopify.com, BicycleBio Storefront API token (secret)
+  - [x] P1.6.1 Worker vars: PUBLIC_STOREFRONT_ID=1000185154, PUBLIC_STORE_DOMAIN=khkkyb-b8.myshopify.com, BicycleBio Storefront API token (secret)
   - [v] P1.6.2 Checkout host: `src/lib/checkout-host.ts` rewrites to store.ecombio.com (banned); point to the live store's checkout domain
-  - [v] P1.6.3 (config only, not deployed) Test host `headless.bicyclebio.com` as a Worker custom domain (apex + www stay on Shopify until P5.3)
+  - [x] P1.6.3 Test host `headless.bicyclebio.com` as a Worker custom domain (apex + www stay on Shopify until P5.3)
   - [ ] P1.6.4 `.env.production`: stop tracking it or keep only non-secret prod values (ties to P1.2.1)
   - Validate: headless.bicyclebio.com returns 200, `data-brand="bicyclebio"`, product links from khkkyb-b8, no `ecombio.myshopify.com` in the HTML
-  - Validated: —
+  - Validated: 2026-11-14 PASS (commit 1acf964). Note: workers.dev now returns 1042 (off once a custom domain is set); headless.bicyclebio.com is the test host
 - [ ] **P1.5 Repo hygiene**
   - [ ] P1.5.1 Usage check, then delete unused stock files (Aside, CartMain, CartLineItem, CartSummary, ProductItem, PaginatedResourceSection, SearchForm*, SearchResults*)
   - [ ] P1.5.2 Rotate the exposed Algolia write and CLI keys
@@ -245,6 +245,7 @@ Newest first. One line each: date · trigger · decision · what changed in this
 
 | Date | Trigger | Decision | Plan change |
 | --- | --- | --- | --- |
+| 2026-11-14 | New request (§3.5) | One codebase, one Worker per brand (headless-bicyclebio, -scooterbio, -skaterbio) via Wrangler environments; each brand gets its own Shopify Headless-channel storefront; brand picked by BRAND env var; ecombio-headless and placeholder bicyclebio-headless to be deleted | wrangler.jsonc env.bicyclebio, deploy.yml matrix, .env.bicyclebio |
 | 2026-11-14 | Finding changes a decision (§3.3) | Prod domain is bicyclebio.com (not ecombio.com); prod Worker runs BicycleBio 1000185154 on khkkyb-b8; test on headless.bicyclebio.com first | §1, M4, P1.4.1, P5.3 updated; added P1.6 |
 | 2026-11-14 | New request (§3.5) | Start PDP data work (`pdp.*` namespace) now, ahead of M2; UI stays in M2. P1.2.1 env check runs first | Added P3.0 and P3.1.7 |
 | 2026-11-14 | New rule | Every feature gets a spec (specs/) and a validation record (validation/) | Added §0 Three documents |
@@ -258,6 +259,7 @@ Newest first. One line per update: date · item ID · what changed · validation
 
 | Date | Item | Change | Validation |
 | --- | --- | --- | --- |
+| 2026-11-14 | P1.6 | Deployed 1acf964 via GitHub Actions; headless.bicyclebio.com/en-us = 200, BicycleBio, khkkyb-b8 links only | PASS (P1.6.1–.3); P1.6.4 open |
 | 2026-11-14 | P1.6 | Verified: repo origin = ecombio-com/headless, main = origin/main (9fa3ce1), 21 files uncommitted; bicyclebio.com DNS on Cloudflare, apex + www point to Shopify; Worker serves Ecombio from dev store | FAIL (not BicycleBio yet) |
 | 2026-11-14 | P3.0 | Spec drafted; task started | — |
 | 2026-11-14 | — | Added specs/ and validation/ with templates; §0 Three documents | — |

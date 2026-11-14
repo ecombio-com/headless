@@ -1,10 +1,8 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
-	"name": "ecombio-headless",
+	"name": "headless",
   "keep_vars": true,
-  // Test host for BicycleBio. bicyclebio.com + www stay on Shopify until launch (plan.md P5.3).
-  "routes": [{"pattern": "headless.bicyclebio.com", "custom_domain": true}],
 	"compatibility_date": "2026-11-14",
 	"compatibility_flags": [
 		"nodejs_compat",
@@ -19,12 +17,25 @@
 			// Self-reference service binding, the service name must match the worker name
 			// see https://opennext.js.org/cloudflare/caching
 			"binding": "WORKER_SELF_REFERENCE",
-			"service": "ecombio-headless"
+			"service": "headless"
 		}
 	],
 	"images": {
 		// Enable image optimization
 		// see https://opennext.js.org/cloudflare/howtos/image
 		"binding": "IMAGES"
+	},
+	// One codebase, one Worker per brand. Deploy: opennextjs-cloudflare deploy --env <brand>
+	// Bindings and routes are not inherited, so each brand repeats them.
+	"env": {
+		"bicyclebio": {
+			"name": "headless-bicyclebio",
+			"routes": [
+				{"pattern": "bicyclebio.com", "custom_domain": true},
+				{"pattern": "www.bicyclebio.com", "custom_domain": true}
+			],
+			"services": [{"binding": "WORKER_SELF_REFERENCE", "service": "headless-bicyclebio"}],
+			"images": {"binding": "IMAGES"}
+		}
 	}
 }

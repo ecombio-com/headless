@@ -23,6 +23,10 @@ const CONFIGS: Record<string, StorefrontConfig> = {
 };
 
 export function getStorefrontConfig(id?: string | null): StorefrontConfig {
+  // BRAND (set per Worker) wins: Headless-channel storefronts have no Hydrogen storefront ID.
+  const brand = process.env.BRAND?.trim().toLowerCase();
+  const byBrand = brand ? Object.values(CONFIGS).find((c) => c.slug === brand) : undefined;
+  if (byBrand) return byBrand;
   const key = String(id ?? '').replace(/\D/g, '');
   return CONFIGS[key] ?? CONFIGS[ECOMBIO_ID];
 }
