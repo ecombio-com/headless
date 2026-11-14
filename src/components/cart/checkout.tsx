@@ -42,7 +42,7 @@ export function CartCheckout({checkoutUrl, hasLines}: {checkoutUrl?: string; has
     setIsRedirecting(true);
   };
 
-  // Shopify mode: skip /address and /payment; go straight to Shopify hosted checkout (store.ecombio.com).
+  // Shopify mode: skip /address and /payment; go straight to Shopify hosted checkout (checkout.ecombio.com).
   if (shopifyMode) {
     return (
       <a

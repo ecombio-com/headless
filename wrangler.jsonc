@@ -3,6 +3,8 @@
 	"main": ".open-next/worker.js",
 	"name": "ecombio-headless",
   "keep_vars": true,
+  // Test host for BicycleBio. bicyclebio.com + www stay on Shopify until launch (plan.md P5.3).
+  "routes": [{"pattern": "headless.bicyclebio.com", "custom_domain": true}],
 	"compatibility_date": "2026-11-14",
 	"compatibility_flags": [
 		"nodejs_compat",
