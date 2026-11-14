@@ -5,7 +5,7 @@ import {localeRedirect} from '~/core/config/i18n';
 const HOOKS_HOST = 'hooks.ecombio.com';
 const HOOKS_ALLOWED_PREFIXES = ['/api/webhooks', '/api/revalidate-menus', '/api/revalidate-product', '/api/cron', '/api/yotpo/webhook'];
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const url = request.nextUrl;
   const {pathname} = url;
 
