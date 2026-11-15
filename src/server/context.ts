@@ -12,7 +12,7 @@ import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {createYotpoClient} from '~/@yotpo/client.server';
 import {createAlgoliaDeps} from '~/@algolia/client.server';
 import {AppSession, readCookie} from './session';
-import {createCustomerAccount} from './customer-account';
+import {createBetterAuthCustomerAccount} from './auth/customer-account';
 
 export type Env = Record<string, string | undefined> & {
   PUBLIC_STORE_DOMAIN: string;
@@ -82,7 +82,8 @@ export function createAppContext(request: Request) {
   const yotpo = createYotpoClient({env, cache: noCache, waitUntil, request});
   void noCache;
   const algolia = createAlgoliaDeps({env, request} as never);
-  const customerAccount = createCustomerAccount({env, session, request});
+  // P1.4: Better Auth + Admin API (old Customer Account API client stays in customer-account.ts until P1.4.8).
+  const customerAccount = createBetterAuthCustomerAccount({env, request});
 
   return {
     env,

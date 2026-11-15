@@ -12,6 +12,7 @@ Next.js 16 App Router, React 19, Tailwind 4, pnpm. Ported from the Hydrogen repo
 - Terminal: Windows PowerShell.
 
 ## Constitution (read first)
+- `.specify/memory/constitution.md` is the ratified rule set (Spec Kit). New features use the Spec Kit flow: `/speckit-specify` → `/speckit-plan` → `/speckit-tasks` → `/speckit-analyze` → `/speckit-implement`; feature folders are `specs/NNN-feature/`.
 - `specs/mission.md` (why), `specs/tech-stack.md` (how), `specs/roadmap.md` (when). Every spec and change must fit them; changing them is a plan.md §3 re-plan.
 - Brand launches follow `docs/brand-launch.md`. Each brand's specification, implementation and validation live in `specs/brands/<brand>/`; update them with every brand change.
 

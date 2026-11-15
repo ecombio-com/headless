@@ -147,10 +147,16 @@ Re-plan steps: name the trigger → list the options → pick one → update §4
 - [ ] **P1.3 Upgrade to Cloudflare Workers Paid**
   - Validate: plan shows Paid in the dashboard
   - Validated: —
-- [ ] **P1.4 Customer sign-in on both stores**
-  - [ ] P1.4.1 Add callback, origin and logout URLs for workers.dev, headless.bicyclebio.com and bicyclebio.com
-  - [ ] P1.4.2 Test sign-in at /en-us/account/login on dev and prod
-  - Validate: sign in, view orders, sign out on both stores
+- [ ] **P1.4 Customer sign-in on every brand domain** — spec: `specs/001-customer-sign-in/spec.md`
+  - [x] P1.4.1 Add callback, origin and logout URLs (apex + www) on the BicycleBio, ScooterBio and SkaterBio Headless storefronts (2026-11-15; Customer Account API, kept until P1.4.8)
+  - [ ] P1.4.2 Spec approved (Better Auth + D1 + auth.<brand>.com)
+  - [ ] P1.4.3 BicycleBio: D1 `headless-auth-bicyclebio`, Better Auth 1.7.25, `auth.bicyclebio.com` custom domain
+  - [ ] P1.4.4 Sign-in page (email code + Google), brand tokens
+  - [ ] P1.4.5 Email codes via Brevo free plan (BREVO_API_KEY; 3 sender domains authenticated in Brevo)
+  - [ ] P1.4.6 Link to Shopify customer + account pages from Admin API (prod write: ask first)
+  - [ ] P1.4.7 Repeat for ScooterBio and SkaterBio
+  - [ ] P1.4.8 Remove the Customer Account API flow
+  - Validate: sign in, view orders, sign out on each brand (spec SC-001..SC-004)
   - Validated: —
 - [~] **P1.6 Prod Worker = BicycleBio on bicyclebio.com**
   - Finding (2026-11-14): workers.dev renders `data-brand="ecombio"` from ecombio.myshopify.com (dev store); `.env.production` holds dev values (1000184544)
@@ -255,10 +261,13 @@ Newest first. One line each: date · trigger · decision · what changed in this
 
 | Date | Trigger | Decision | Plan change |
 | --- | --- | --- | --- |
+| 2026-11-14 | New tool (§3.3) | Adopt GitHub Spec Kit 1.4.0 for Spec-Driven Development; `.specify/memory/constitution.md` v1.0.0 ratified from specs/mission.md (9 principles); new features use /speckit-* and live in specs/NNN-feature/ | CLAUDE.md, tech-stack.md, .gitignore |
 | 2026-11-14 | New request (§3.5) | Constitution confirmed by the owner: mission = brand family only (ecombio.com stays on Hydrogen); PLP search = Shopify now, Algolia later; after ScooterBio, brand look comes before PLP and PDP. Roadmap rewritten as 22 small phases; README gains the PLP structure | specs/roadmap.md, tech-stack.md, mission.md, README.md |
 | 2026-11-14 | Finding changes a decision (§3.3): "ScooterBio event" | scooterbio.com is registered through Shopify on the dev store (can't pay renewals; no nameserver option). ScooterBio stays Headless like the other brands. Shopify's DNS settings allow a nameserver change, so: nameservers → Cloudflare now (fast), 20 email forwards → Cloudflare Email Routing, then transfer the registration to Cloudflare Registrar before it expires (Jan 25, 2027) | P1.8 unblocked once Cloudflare DNS is active |
 | 2026-11-14 | New request (§3.5) | Stripe checkout on bicyclebio.com now, test mode first (BicycleBio only); live keys only after a test order lands in Shopify | P2.4 runs on headless-bicyclebio ahead of M1 |
 | 2026-11-14 | New request (§3.5) | One codebase, one Worker per brand (headless-bicyclebio, -scooterbio, -skaterbio) via Wrangler environments; each brand gets its own Shopify Headless-channel storefront; brand picked by BRAND env var; ecombio-headless and placeholder bicyclebio-headless to be deleted | wrangler.jsonc env.bicyclebio, deploy.yml matrix, .env.bicyclebio |
+| 2026-11-15 | Cost rule | Everything free: sign-in code emails move from Cloudflare Email Service (needs Workers Paid) to Brevo free (300/day, multiple domains). send_email binding removed | P1.4.5, spec, tech-stack.md |
+| 2026-11-15 | Adding a tool (§3) | Shopify allows one customer-accounts domain per store (auth.ecombio.com), so per-brand sign-in moves to Better Auth 1.7.25 + D1 per brand on auth.<brand>.com; email codes via Cloudflare Email Service; Google now, Apple later | P1.4 rewritten; specs/001-customer-sign-in; tech-stack.md |
 | 2026-11-14 | Finding changes a decision (§3.3) | Prod domain is bicyclebio.com (not ecombio.com); prod Worker runs BicycleBio 1000185154 on khkkyb-b8; test on headless.bicyclebio.com first | §1, M4, P1.4.1, P5.3 updated; added P1.6 |
 | 2026-11-14 | New request (§3.5) | Start PDP data work (`pdp.*` namespace) now, ahead of M2; UI stays in M2. P1.2.1 env check runs first | Added P3.0 and P3.1.7 |
 | 2026-11-14 | New rule | Every feature gets a spec (specs/) and a validation record (validation/) | Added §0 Three documents |
@@ -272,6 +281,14 @@ Newest first. One line per update: date · item ID · what changed · validation
 
 | Date | Item | Change | Validation |
 | --- | --- | --- | --- |
+| 2026-11-15 | P1.4.5 | Switched code emails to Brevo API (src/server/auth/email.ts); removed send_email from wrangler.jsonc; set-auth-secrets.ps1 -Brevo; BETTER_AUTH_SECRET only set when missing | — |
+| 2026-11-15 | P1.4.5, P1.4.7 | Rollout to all brands started: wrangler.jsonc auth.<brand>.com routes for scooterbio/skaterbio, send_email binding EMAIL on all 3; scripts/enable-auth.ps1 (remote D1 migrations + BETTER_AUTH_SECRET if missing). Waiting on: Workers Paid, Email Sending domain onboarding, D1 for scooterbio/skaterbio | — |
+| 2026-11-15 | P1.4.6 | Local: .env.local admin keys switched to the CMS app (dev store uses CMS, prod uses ECOMBIOv2); CMS app scopes + read_customers,write_customers (cms-7 released); /en-us/account/profile 200 and shows the existing dev-store customer (linked by email) | PASS (profile, local) |
+| 2026-11-15 | — | ga4.tsx: <script> → next/script (React 19 "script tag while rendering" console error; GA tags never ran on client renders) | pending local check |
+| 2026-11-15 | P1.4.6 | Account pages switched to Better Auth + Admin API: src/server/auth/customer-account.ts (same interface/shapes as the old client; orders filtered by customer + tag storefront_<brand>), src/server/auth/shopify-admin.ts; context.ts wired. Shopify customer found/created by email on first account visit (dev store locally) | pending local test |
+| 2026-11-15 | P1.4.3–P1.4.4 | Local test: sign-in page renders; email code accepted; get-session returns user (emailVerified) | PASS (local) |
+| 2026-11-15 | P1.4.3–P1.4.4 | D1 headless-auth-bicyclebio created (binding AUTH_DB on env.bicyclebio; local dev uses headless-auth-local); auth.bicyclebio.com route added; better-auth 1.7.25 pinned; added src/server/auth/, /api/auth, (auth)/sign-in page, middleware auth-host rewrite, migrations/auth/0001, scripts/set-auth-secrets.ps1. Not deployed | pending local test |
+| 2026-11-15 | P1.4 | P1.4.1 done (Customer Account URLs on all 3 storefronts); re-planned sign-in to Better Auth + D1 on auth.<brand>.com; wrote specs/001-customer-sign-in/spec.md (draft) | — |
 | 2026-11-14 | P1.6–P1.8 | Brand features documented in specs/brands/<brand>/ (specification, implementation, validation); SkaterBio done (#1005); ScooterBio in progress | — |
 | 2026-11-14 | — | Constitution added: specs/mission.md, specs/tech-stack.md, specs/roadmap.md; linked from CLAUDE.md | — |
 | 2026-11-14 | P1.7–P1.8 | Wrote docs/brand-launch.md + scripts set-brand-env.ps1, set-brand-secrets.ps1; prepared wrangler env + .env files for skaterbio, scooterbio; deploy matrix fail-fast off | — |

@@ -54,3 +54,34 @@ Every spec, plan item and code change must fit these three files. Each brand is 
 - Serving ecombio.com from this repo (confirmed 2026-11-14: brand family only; ecombio.com stays on Hydrogen).
 - Leaving Shopify for catalog or orders.
 - A separate database of our own (customers, analytics). Revisit after launch.
+
+## 8. Benefits and opportunities
+
+- One fix or feature reaches every brand at once; one team runs one codebase.
+- Brand sites rank for their own product type, which a general store can't match.
+- We own the buying experience (cart → address → payment) while Shopify keeps catalog, orders, inventory and tax.
+- A new brand goes live in about 30 minutes (`docs/brand-launch.md`); each brand fails alone.
+- Opportunity: own data and analytics after launch (see §7, out of scope for now).
+
+## 9. Usages and benefits
+
+| Who | Uses | Benefit |
+| --- | --- | --- |
+| Shoppers | Browse, search, check out, sign in, see orders | Fast, focused store for one product type |
+| The owner (ecombio) | One repo, one Shopify admin, brand scripts | Every brand live from one push; orders in one place |
+| Claude sessions | Constitution, `plan.md`, `specs/`, `validation/` | One source of truth |
+
+## 10. Requirements
+
+**Minimum**
+- Shopify live store (khkkyb-b8) with a Headless storefront and tokens per brand.
+- Cloudflare account: zone per brand, Worker `headless-<brand>`, D1 database per brand for sign-in.
+- Stripe account (test mode for development) and the ECOMBIOv2 Shopify app for order creation.
+- GitHub repo with Actions and an Environment per brand; Node 22, pnpm.
+- `.env.<brand>` (public values) in the repo; secrets set through `scripts/set-*-secrets.ps1`.
+
+**Recommended**
+- Cloudflare Workers Paid plan with a persistent cache (roadmap phase 15).
+- Stripe live keys rotated, live webhooks per brand (phase 21).
+- `check-brand.ps1` passing with 0 failures before any launch; two clean weeks of logs after (phase 22).
+- Error pages, security headers and automated tests (phase 19).

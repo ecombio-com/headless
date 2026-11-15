@@ -18,10 +18,13 @@ Facts below were read from the repo on 2026-11-14 (commit `f54a9a8` + local chan
 | Payments | Stripe (Payment Element, `@stripe/stripe-js`) | 10.x | Webhook endpoint: **yes**. Account + keys: shared |
 | Order creation | ECOMBIOv2 Shopify app (client credentials → Admin `orderCreate`) | — | Shared |
 | Reviews | Yotpo | — | Shared |
+| Customer sign-in | Better Auth on `auth.<brand>.com` + Cloudflare D1 | 1.7.25 (pinned) | D1 database + auth host: **yes** |
+| Transactional email | Brevo transactional API (free: 300/day) | v3 | Sender `no-reply@<brand>.com`: **yes**. API key: shared |
 | Search (PLP) | Shopify Storefront search + Search & Discovery (filters, synonyms, boosts) now; Algolia later (built, `ALGOLIA_ENABLED=false`) once its index holds live-store products per brand | — | Shared; results scoped per brand |
 | Analytics | GA4 (with consent banner) | — | Shared |
 | Validation | zod | 4.x | Shared |
 | Ops CLIs | `cf` (Cloudflare API: DNS, zones, rules, email), `wrangler` (Workers, secrets, logs), `gh`, `stripe` | cf 1.0 beta | Shared |
+| Spec-Driven Development | GitHub Spec Kit (`specify` CLI, `.specify/`, `/speckit-*` skills in `.claude/skills/`) | 1.4.0 | Shared |
 
 ## 2. How a request flows
 
@@ -81,10 +84,14 @@ Size: about 400 source files, 33,000 lines.
 - No persistent cache yet (OpenNext incremental cache not configured) → Yotpo "Too many subrequests".
 - Compat layer still in use; generated routes still exist.
 - No error pages, no security headers, no automated tests.
-- Customer sign-in URLs not yet added per brand domain.
+- Customer sign-in (Better Auth, P1.4, email + password) is built on `feat/customer-sign-in` but not merged or deployed; Customer Account API flow still live.
 - Stripe in test mode; live keys and key rotation at public launch.
 
 ## 7. Rules for changing the stack
 
 - Adding or swapping a tool is a §3 re-planning trigger in `plan.md`: write the decision in `plan.md` §6 and update this file in the same change.
 - Pin versions that touch payments or Shopify APIs; upgrade on purpose, not by accident.
+
+## 8. Change log
+
+- 2026-11-15: Better Auth simplified to email + password only (no Google, no email OTP, no plugins). The Brevo sender was used for sign-in codes; confirm whether anything else still uses it before removing it from the table above.

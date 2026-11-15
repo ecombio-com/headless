@@ -1,5 +1,6 @@
 'use client';
 import {useEffect} from 'react';
+import Script from 'next/script';
 import {useAnalytics} from '~/components/analytics/analytics';
 import {startGa4} from '~/lib/analytics/ga4';
 
@@ -7,7 +8,10 @@ export function Ga4Tag({id, nonce}: {id?: string; nonce?: string}) {
   if (!id) return null;
   return (
     <>
-      <script
+      {/* next/script: plain <script> tags inside client components never run (React 19 warning). */}
+      <Script
+        id="ga4-init"
+        strategy="afterInteractive"
         nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: `window.dataLayer=window.dataLayer||[];
@@ -18,9 +22,10 @@ gtag('js',new Date());
 gtag('config','${id}',{send_page_view:false});`,
         }}
       />
-      <script
+      <Script
+        id="ga4-gtag"
+        strategy="afterInteractive"
         nonce={nonce}
-        async
         src={`https://www.googletagmanager.com/gtag/js?id=${id}`}
       />
     </>

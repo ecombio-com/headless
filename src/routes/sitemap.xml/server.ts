@@ -1,6 +1,7 @@
 // Ported from ($locale).[sitemap.xml].tsx by scripts/split-route.mjs.
 import type {Route} from '~/server/route-types';
 import {getSitemapIndex} from '~/compat/hydrogen.server';
+import {formatSitemapResponse} from '~/lib/sitemap-format';
 
 
 export async function loader({
@@ -12,7 +13,5 @@ export async function loader({
     request,
   });
 
-  response.headers.set('Cache-Control', `max-age=${60 * 60 * 24}`);
-
-  return response;
+  return formatSitemapResponse(response);
 }
