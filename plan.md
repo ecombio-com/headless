@@ -240,6 +240,8 @@ Re-plan steps: name the trigger → list the options → pick one → update §4
 
 ### P6 After launch — backlog
 
+- [ ] P6.4 Brand email: support@<brand>.com for bicyclebio, skaterbio, scooterbio via Cloudflare Email Routing (`scripts/cf-email.ps1`, ready; parked 2026-11-14). Open: which inbox receives it. scooterbio.com keeps Shopify forwarding until then (MX copied to Cloudflare); move its 20 forwards before the domain leaves Shopify
+
 - [ ] P6.1 Remove the compat layer, one area at a time
 - [ ] P6.2 Bring back Next.js-only extras: Klaviyo, llms.txt, shop agent, Spanish, bundles, gift cards, expert reviews
 
@@ -251,6 +253,7 @@ Newest first. One line each: date · trigger · decision · what changed in this
 
 | Date | Trigger | Decision | Plan change |
 | --- | --- | --- | --- |
+| 2026-11-14 | Finding changes a decision (§3.3): "ScooterBio event" | scooterbio.com is registered through Shopify on the dev store (can't pay renewals; no nameserver option). ScooterBio stays Headless like the other brands. Shopify's DNS settings allow a nameserver change, so: nameservers → Cloudflare now (fast), 20 email forwards → Cloudflare Email Routing, then transfer the registration to Cloudflare Registrar before it expires (Jan 25, 2027) | P1.8 unblocked once Cloudflare DNS is active |
 | 2026-11-14 | New request (§3.5) | Stripe checkout on bicyclebio.com now, test mode first (BicycleBio only); live keys only after a test order lands in Shopify | P2.4 runs on headless-bicyclebio ahead of M1 |
 | 2026-11-14 | New request (§3.5) | One codebase, one Worker per brand (headless-bicyclebio, -scooterbio, -skaterbio) via Wrangler environments; each brand gets its own Shopify Headless-channel storefront; brand picked by BRAND env var; ecombio-headless and placeholder bicyclebio-headless to be deleted | wrangler.jsonc env.bicyclebio, deploy.yml matrix, .env.bicyclebio |
 | 2026-11-14 | Finding changes a decision (§3.3) | Prod domain is bicyclebio.com (not ecombio.com); prod Worker runs BicycleBio 1000185154 on khkkyb-b8; test on headless.bicyclebio.com first | §1, M4, P1.4.1, P5.3 updated; added P1.6 |

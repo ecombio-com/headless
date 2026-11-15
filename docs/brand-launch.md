@@ -5,8 +5,8 @@ How bicyclebio.com went live. Repeat it for each brand.
 | Brand | Domain | Status |
 | --- | --- | --- |
 | BicycleBio | bicyclebio.com | DONE✅ 2026-11-14 (test order #1004) |
-| SkaterBio | skaterbio.com | IN PROGRESS⚠️ (DNS on Cloudflare; registrar Namecheap) |
-| ScooterBio | scooterbio.com | IN PROGRESS⚠️ (step 1: registered through Shopify; DNS moving to Cloudflare) |
+| SkaterBio | skaterbio.com | DONE✅ 2026-11-14 (test order #1005) |
+| ScooterBio | scooterbio.com | IN PROGRESS⚠️ (step 1: nameservers → Cloudflare; registration moves to Cloudflare Registrar before Jan 25, 2027) |
 
 ## The setup
 
@@ -92,7 +92,7 @@ Done when it ends with `== 0 failed ==`. If your PC says the site can't be found
 - Buy one item on `https://<brand>.com/en-us` with card `4242 4242 4242 4242`, any future date, any 3-digit code.
 - Confirm:
 ```powershell
-(stripe payment_intents list --limit 1 | ConvertFrom-Json).data | Select-Object id, status, amount, @{n='shopify_order';e={$_.metadata.shopify_order_name}}
+(stripe payment_intents list --limit 1 | ConvertFrom-Json).data | Format-List id, status, amount, @{n='shopify_order';e={$_.metadata.shopify_order_name}}
 ```
 - Done when status is `succeeded` and a Shopify order number shows. Cancel the test order in Shopify afterwards.
 

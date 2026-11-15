@@ -10,7 +10,7 @@ jobs:
       fail-fast: false # one brand failing never stops the others
       matrix:
         # Add a brand here only at its launch step (docs/brand-launch.md, step 6)
-        brand: [bicyclebio, skaterbio]
+        brand: [bicyclebio, skaterbio, scooterbio]
     environment: ${{ matrix.brand }}
     steps:
       - uses: actions/checkout@v4
