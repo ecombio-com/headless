@@ -87,7 +87,16 @@
 			],
 			"images": {
 				"binding": "IMAGES"
-			}
+			},
+			// Sign-in database (P1.4). Same binding name on every brand.
+			"d1_databases": [
+				{
+					"binding": "AUTH_DB",
+					"database_name": "headless-auth-skaterbio",
+					"database_id": "97d9b063-4107-4f29-b4b7-67d682e76d81",
+					"migrations_dir": "migrations/auth"
+				}
+			]
 		},
 		"scooterbio": {
 			"name": "headless-scooterbio",
@@ -113,7 +122,16 @@
 			],
 			"images": {
 				"binding": "IMAGES"
-			}
+			},
+			// Sign-in database (P1.4). Same binding name on every brand.
+			"d1_databases": [
+				{
+					"binding": "AUTH_DB",
+					"database_name": "headless-auth-scooterbio",
+					"database_id": "cff24ca6-774a-4838-b245-368093490159",
+					"migrations_dir": "migrations/auth"
+				}
+			]
 		}
 	},
 	// Local dev only: a local copy of the sign-in database (never the live one).
