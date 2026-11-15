@@ -196,7 +196,7 @@ export function createBetterAuthCustomerAccount({env, request}: {env: Env; reque
     },
 
     async login(_opts: Record<string, unknown> = {}) {
-      return redirectTo(signInUrl(request.url, new URL(request.url).searchParams.get('return_to')));
+      return redirectTo(signInUrl(request.url, new URL(request.url).searchParams.get('return_to') ?? undefined));
     },
 
     async authorize() {

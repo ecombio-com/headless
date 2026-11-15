@@ -1,6 +1,5 @@
 'use client';
-// Browser side of Better Auth. Calls /api/auth on the current origin (auth.<brand>.com live).
+// Browser side of Better Auth: credentials sign-in against /api/auth on the current origin.
 import {createAuthClient} from 'better-auth/react';
-import {emailOTPClient} from 'better-auth/client/plugins';
 
-export const authClient = createAuthClient({plugins: [emailOTPClient()]});
+export const authClient = createAuthClient();
