@@ -47,6 +47,7 @@ function build(requestUrl: string) {
         allowedAttempts: 3,
         async sendVerificationOTP({email, otp, type}) {
           if (type !== 'sign-in') return;
+          if (!brevoKey && hosts.cookieDomain) throw new Error('Sign-in email is not configured');
           // Not awaited: avoids timing differences between known and unknown emails.
           background(sendSignInCode({email, otp, requestUrl, apiKey: brevoKey}));
         },
