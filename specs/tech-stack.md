@@ -18,6 +18,8 @@ Facts below were read from the repo on 2026-11-14 (commit `f54a9a8` + local chan
 | Payments | Stripe (Payment Element, `@stripe/stripe-js`) | 10.x | Webhook endpoint: **yes**. Account + keys: shared |
 | Order creation | ECOMBIOv2 Shopify app (client credentials → Admin `orderCreate`) | — | Shared |
 | Reviews | Yotpo | — | Shared |
+| Customer sign-in | Better Auth on `auth.<brand>.com` + Cloudflare D1 | 1.7.25 (pinned) | D1 database + auth host: **yes** |
+| Transactional email | Brevo transactional API (free: 300/day) | v3 | Sender `no-reply@<brand>.com`: **yes**. API key: shared |
 | Search (PLP) | Shopify Storefront search + Search & Discovery (filters, synonyms, boosts) now; Algolia later (built, `ALGOLIA_ENABLED=false`) once its index holds live-store products per brand | — | Shared; results scoped per brand |
 | Analytics | GA4 (with consent banner) | — | Shared |
 | Validation | zod | 4.x | Shared |
@@ -82,7 +84,7 @@ Size: about 400 source files, 33,000 lines.
 - No persistent cache yet (OpenNext incremental cache not configured) → Yotpo "Too many subrequests".
 - Compat layer still in use; generated routes still exist.
 - No error pages, no security headers, no automated tests.
-- Customer sign-in URLs not yet added per brand domain.
+- Customer sign-in (Better Auth, P1.4) not built yet; Customer Account API flow still live.
 - Stripe in test mode; live keys and key rotation at public launch.
 
 ## 7. Rules for changing the stack

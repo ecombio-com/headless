@@ -4,12 +4,12 @@ import os, re, json
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROUTES = os.path.join(ROOT, 'src', 'routes')
 APP = os.path.join(ROOT, 'src', 'app')
-NO_LOCALE = {'api.checkout-status', 'api.checkout-url', 'api.checkout.sessions', 'api.stripe.webhook', 'robots.txt', 'sitemap.xml', 'sitemap.$type.$page.xml'}
+NO_LOCALE = {'api.checkout-status', 'api.checkout-url', 'api.checkout.sessions', 'api.stripe.webhook', 'robots.txt', 'sitemap.xml', 'sitemap.$type.$page.xml', 'sitemap.xsl'}
 # Loader-only routes and routes that must set cookies become route handlers.
 # Pages that use the focused checkout layout; every other page uses the shop layout.
 CHECKOUT = {'cart', 'address', 'payment', 'payment_.complete'}
 FORCE_HANDLER = {'cart.$lines', 'discount.$code', 'account._index', 'checkout._index'}
-SPECIAL = {'sitemap.xml': ['sitemap.xml'], 'robots.txt': ['robots.txt'], 'sitemap.$type.$page.xml': ['sitemap', '$type', '$page']}
+SPECIAL = {'sitemap.xml': ['sitemap.xml'], 'robots.txt': ['robots.txt'], 'sitemap.$type.$page.xml': ['sitemap', '$type', '$page'], 'sitemap.xsl': ['sitemap.xsl']}
 
 def segments(name):
     if name in SPECIAL: return SPECIAL[name]

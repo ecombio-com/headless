@@ -1865,16 +1865,26 @@ export type ProductExtrasQueryVariables = StorefrontAPI.Exact<{
 
 export type ProductExtrasQuery = {
   product?: StorefrontAPI.Maybe<{
+    faqJson?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+    specsJson?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
     faq?: StorefrontAPI.Maybe<{
       reference?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Page, 'body'>>;
     }>;
     techSpecs?: StorefrontAPI.Maybe<{
       reference?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Page, 'body'>>;
     }>;
-    ownersManual?: StorefrontAPI.Maybe<{
-      reference?: StorefrontAPI.Maybe<Pick<StorefrontAPI.GenericFile, 'url'>>;
+    resources?: StorefrontAPI.Maybe<{
+      reference?: StorefrontAPI.Maybe<{
+        ownersManual?: StorefrontAPI.Maybe<{
+          reference?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.GenericFile, 'url'>
+          >;
+        }>;
+        assemblyVideo?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MetaobjectField, 'value'>
+        >;
+      }>;
     }>;
-    assemblyVideo?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
     expertReviews?: StorefrontAPI.Maybe<{
       references?: StorefrontAPI.Maybe<{
         nodes: Array<{
@@ -1945,15 +1955,22 @@ export type ProductExtrasQuery = {
         }>;
       }>;
     }>;
-    reassurance?: StorefrontAPI.Maybe<{
-      references?: StorefrontAPI.Maybe<{
-        nodes: Array<{
-          icon?: StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.MetaobjectField, 'value'>
-          >;
-          label?: StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.MetaobjectField, 'value'>
-          >;
+    policy?: StorefrontAPI.Maybe<{
+      reference?: StorefrontAPI.Maybe<{
+        reassurance?: StorefrontAPI.Maybe<{
+          references?: StorefrontAPI.Maybe<{
+            nodes: Array<{
+              icon?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+              label?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+              description?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.MetaobjectField, 'value'>
+              >;
+            }>;
+          }>;
         }>;
       }>;
     }>;
@@ -2018,12 +2035,23 @@ export type ProductFragment = Pick<
     minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
     maxVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
   };
-  handlingDaysMin?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-  handlingDaysMax?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-  transitExtraDays?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Metafield, 'value'>
-  >;
+  policyDays?: StorefrontAPI.Maybe<{
+    reference?: StorefrontAPI.Maybe<{
+      handlingDaysMin?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value'>
+      >;
+      handlingDaysMax?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value'>
+      >;
+      transitExtraDays?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.MetaobjectField, 'value'>
+      >;
+    }>;
+  }>;
   popularSearches?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+  pdpSteps?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+  ratingValue?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+  ratingCount?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
   options: Array<
     Pick<StorefrontAPI.ProductOption, 'name'> & {
       optionValues: Array<
@@ -2188,21 +2216,25 @@ export type ProductFragment = Pick<
       }
     >;
   };
-  trustBadges?: StorefrontAPI.Maybe<{
-    references?: StorefrontAPI.Maybe<{
-      nodes: Array<{
-        fields: Array<
-          Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
-            reference?: StorefrontAPI.Maybe<
-              | Pick<StorefrontAPI.GenericFile, 'url'>
-              | {
-                  image?: StorefrontAPI.Maybe<
-                    Pick<StorefrontAPI.Image, 'url' | 'altText'>
-                  >;
-                }
+  policyBadges?: StorefrontAPI.Maybe<{
+    reference?: StorefrontAPI.Maybe<{
+      badges?: StorefrontAPI.Maybe<{
+        references?: StorefrontAPI.Maybe<{
+          nodes: Array<{
+            fields: Array<
+              Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
+                reference?: StorefrontAPI.Maybe<
+                  | Pick<StorefrontAPI.GenericFile, 'url'>
+                  | {
+                      image?: StorefrontAPI.Maybe<
+                        Pick<StorefrontAPI.Image, 'url' | 'altText'>
+                      >;
+                    }
+                >;
+              }
             >;
-          }
-        >;
+          }>;
+        }>;
       }>;
     }>;
   }>;
@@ -2302,18 +2334,25 @@ export type ProductQuery = {
         minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
         maxVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
       };
-      handlingDaysMin?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.Metafield, 'value'>
-      >;
-      handlingDaysMax?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.Metafield, 'value'>
-      >;
-      transitExtraDays?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.Metafield, 'value'>
-      >;
+      policyDays?: StorefrontAPI.Maybe<{
+        reference?: StorefrontAPI.Maybe<{
+          handlingDaysMin?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.MetaobjectField, 'value'>
+          >;
+          handlingDaysMax?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.MetaobjectField, 'value'>
+          >;
+          transitExtraDays?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.MetaobjectField, 'value'>
+          >;
+        }>;
+      }>;
       popularSearches?: StorefrontAPI.Maybe<
         Pick<StorefrontAPI.Metafield, 'value'>
       >;
+      pdpSteps?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+      ratingValue?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+      ratingCount?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
       options: Array<
         Pick<StorefrontAPI.ProductOption, 'name'> & {
           optionValues: Array<
@@ -2484,21 +2523,25 @@ export type ProductQuery = {
           }
         >;
       };
-      trustBadges?: StorefrontAPI.Maybe<{
-        references?: StorefrontAPI.Maybe<{
-          nodes: Array<{
-            fields: Array<
-              Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
-                reference?: StorefrontAPI.Maybe<
-                  | Pick<StorefrontAPI.GenericFile, 'url'>
-                  | {
-                      image?: StorefrontAPI.Maybe<
-                        Pick<StorefrontAPI.Image, 'url' | 'altText'>
-                      >;
-                    }
+      policyBadges?: StorefrontAPI.Maybe<{
+        reference?: StorefrontAPI.Maybe<{
+          badges?: StorefrontAPI.Maybe<{
+            references?: StorefrontAPI.Maybe<{
+              nodes: Array<{
+                fields: Array<
+                  Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
+                    reference?: StorefrontAPI.Maybe<
+                      | Pick<StorefrontAPI.GenericFile, 'url'>
+                      | {
+                          image?: StorefrontAPI.Maybe<
+                            Pick<StorefrontAPI.Image, 'url' | 'altText'>
+                          >;
+                        }
+                    >;
+                  }
                 >;
-              }
-            >;
+              }>;
+            }>;
           }>;
         }>;
       }>;
@@ -2565,6 +2608,21 @@ export type ProductQuery = {
       seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
     }
   >;
+};
+
+export type VariantUrlQueryVariables = StorefrontAPI.Exact<{
+  slug: StorefrontAPI.Scalars['String']['input'];
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type VariantUrlQuery = {
+  metaobject?: StorefrontAPI.Maybe<{
+    product?: StorefrontAPI.Maybe<{
+      reference?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Product, 'handle'>>;
+    }>;
+    options?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MetaobjectField, 'value'>>;
+  }>;
 };
 
 export type AlgoliaProductsByIdsQueryVariables = StorefrontAPI.Exact<{
@@ -2907,27 +2965,23 @@ export type CollectionItemFragment = Pick<
 };
 
 export type CatalogQueryVariables = StorefrontAPI.Exact<{
+  first: StorefrontAPI.Scalars['Int']['input'];
+  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
+  sortKey?: StorefrontAPI.InputMaybe<StorefrontAPI.ProductSortKeys>;
+  reverse?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Boolean']['input']>;
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
-  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
-  startCursor?: StorefrontAPI.InputMaybe<
-    StorefrontAPI.Scalars['String']['input']
-  >;
-  endCursor?: StorefrontAPI.InputMaybe<
-    StorefrontAPI.Scalars['String']['input']
-  >;
 }>;
 
 export type CatalogQuery = {
   products: {
     nodes: Array<
-      Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
+      Pick<
+        StorefrontAPI.Product,
+        'id' | 'handle' | 'title' | 'vendor' | 'tags' | 'availableForSale'
+      > & {
         featuredImage?: StorefrontAPI.Maybe<
-          Pick<
-            StorefrontAPI.Image,
-            'id' | 'altText' | 'url' | 'width' | 'height'
-          >
+          Pick<StorefrontAPI.Image, 'url' | 'altText' | 'width' | 'height'>
         >;
         priceRange: {
           minVariantPrice: Pick<
@@ -2939,12 +2993,52 @@ export type CatalogQuery = {
             'amount' | 'currencyCode'
           >;
         };
+        compareAtPriceRange: {
+          minVariantPrice: Pick<
+            StorefrontAPI.MoneyV2,
+            'amount' | 'currencyCode'
+          >;
+        };
+        cardBadge?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+        cardSpecsText?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Metafield, 'value'>
+        >;
+        cardSpecs?: StorefrontAPI.Maybe<{
+          references?: StorefrontAPI.Maybe<{
+            nodes: Array<{
+              fields: Array<
+                Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'>
+              >;
+            }>;
+          }>;
+        }>;
+        selectedOrFirstAvailableVariant?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
+            selectedOptions: Array<
+              Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+            >;
+          }
+        >;
+        options: Array<
+          Pick<StorefrontAPI.ProductOption, 'name'> & {
+            optionValues: Array<
+              Pick<StorefrontAPI.ProductOptionValue, 'name'> & {
+                swatch?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.ProductOptionValueSwatch, 'color'> & {
+                    image?: StorefrontAPI.Maybe<{
+                      previewImage?: StorefrontAPI.Maybe<
+                        Pick<StorefrontAPI.Image, 'url'>
+                      >;
+                    }>;
+                  }
+                >;
+              }
+            >;
+          }
+        >;
       }
     >;
-    pageInfo: Pick<
-      StorefrontAPI.PageInfo,
-      'hasPreviousPage' | 'hasNextPage' | 'startCursor' | 'endCursor'
-    >;
+    pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
   };
 };
 
@@ -3448,6 +3542,25 @@ export type PredictiveSearchQuery = {
   }>;
 };
 
+export type VariantSlugsQueryVariables = StorefrontAPI.Exact<{
+  after?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['String']['input']>;
+}>;
+
+export type VariantSlugsQuery = {
+  metaobjects: {
+    pageInfo: Pick<StorefrontAPI.PageInfo, 'hasNextPage' | 'endCursor'>;
+    nodes: Array<
+      Pick<StorefrontAPI.Metaobject, 'handle'> & {
+        product?: StorefrontAPI.Maybe<{
+          reference?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.Product, 'handle'>
+          >;
+        }>;
+      }
+    >;
+  };
+};
+
 interface GeneratedQueryTypes {
   '#graphql\n  query AnnouncementBar($country: CountryCode, $language: LanguageCode)\n  @inContext(country: $country, language: $language) {\n    metaobject(handle: {type: "announcement_bar", handle: "main"}) {\n      enabled: field(key: "enabled") { value }\n      autoRotate: field(key: "auto_rotate") { value }\n      intervalSeconds: field(key: "interval_seconds") { value }\n      dismissible: field(key: "dismissible") { value }\n      messages: field(key: "messages") {\n        references(first: 10) {\n          nodes {\n            ... on Metaobject {\n              id\n              text: field(key: "text") { value }\n              style: field(key: "style") { value }\n              code: field(key: "code") { value }\n              buttonLabel: field(key: "button_label") { value }\n              link: field(key: "link") { value }\n              startsAt: field(key: "starts_at") { value }\n              endsAt: field(key: "ends_at") { value }\n              showCountdown: field(key: "show_countdown") { value }\n              devices: field(key: "devices") { value }\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: AnnouncementBarQuery;
@@ -3545,17 +3658,21 @@ interface GeneratedQueryTypes {
     return: HomeDirectoryQuery;
     variables: HomeDirectoryQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment ProductCardItem on Product {\n    id\n    handle\n    title\n    vendor\n    tags\n    availableForSale\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice { amount currencyCode }\n      maxVariantPrice { amount currencyCode }\n    }\n    compareAtPriceRange {\n      minVariantPrice { amount currencyCode }\n    }\n    cardBadge: metafield(namespace: "custom", key: "card_badge") {\n      value\n    }\n    cardSpecsText: metafield(namespace: "custom", key: "card_specs") {\n      value\n    }\n    cardSpecs: metafield(namespace: "custom", key: "product_specs") {\n      references(first: 4) {\n        nodes {\n          ... on Metaobject {\n            fields {\n              key\n              value\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant {\n      id\n      availableForSale\n      selectedOptions { name value }\n    }\n    options {\n      name\n      optionValues {\n        name\n        swatch {\n          color\n          image { previewImage { url } }\n        }\n      }\n    }\n  }\n\n  query ProductCrossSell(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      frequentlyBought: metafield(namespace: "custom", key: "frequently_bought_together") {\n        references(first: 4) {\n          nodes {\n            ... on Product {\n              id\n              handle\n              title\n              featuredImage { url altText }\n              variants(first: 2) { nodes { id } }\n              selectedOrFirstAvailableVariant(ignoreUnknownOptions: true) {\n                id\n                availableForSale\n                price { amount currencyCode }\n              }\n            }\n          }\n        }\n      }\n    }\n    complementary: productRecommendations(productHandle: $handle, intent: COMPLEMENTARY) {\n      ...ProductCardItem\n    }\n    related: productRecommendations(productHandle: $handle, intent: RELATED) {\n      ...ProductCardItem\n    }\n  }\n': {
+  '#graphql\n  #graphql\n  fragment ProductCardItem on Product {\n    id\n    handle\n    title\n    vendor\n    tags\n    availableForSale\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice { amount currencyCode }\n      maxVariantPrice { amount currencyCode }\n    }\n    compareAtPriceRange {\n      minVariantPrice { amount currencyCode }\n    }\n    cardBadge: metafield(namespace: "custom", key: "card_badge") {\n      value\n    }\n    cardSpecsText: metafield(namespace: "custom", key: "card_specs") {\n      value\n    }\n    cardSpecs: metafield(namespace: "custom", key: "product_specs") {\n      references(first: 4) {\n        nodes {\n          ... on Metaobject {\n            fields {\n              key\n              value\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant {\n      id\n      availableForSale\n      selectedOptions { name value }\n    }\n    options {\n      name\n      optionValues {\n        name\n        swatch {\n          color\n          image { previewImage { url } }\n        }\n      }\n    }\n  }\n\n  query ProductCrossSell(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      frequentlyBought: metafield(namespace: "pdp", key: "bought_together") {\n        references(first: 4) {\n          nodes {\n            ... on Product {\n              id\n              handle\n              title\n              featuredImage { url altText }\n              variants(first: 2) { nodes { id } }\n              selectedOrFirstAvailableVariant(ignoreUnknownOptions: true) {\n                id\n                availableForSale\n                price { amount currencyCode }\n              }\n            }\n          }\n        }\n      }\n    }\n    complementary: productRecommendations(productHandle: $handle, intent: COMPLEMENTARY) {\n      ...ProductCardItem\n    }\n    related: productRecommendations(productHandle: $handle, intent: RELATED) {\n      ...ProductCardItem\n    }\n  }\n': {
     return: ProductCrossSellQuery;
     variables: ProductCrossSellQueryVariables;
   };
-  '#graphql\n  query ProductExtras($handle: String!, $country: CountryCode, $language: LanguageCode)\n  @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      faq: metafield(namespace: "custom", key: "frequently_asked_questions") {\n        reference { ... on Page { body } }\n      }\n      techSpecs: metafield(namespace: "custom", key: "technical_specifications") {\n        reference { ... on Page { body } }\n      }\n      ownersManual: metafield(namespace: "custom", key: "owners_manual") {\n        reference { ... on GenericFile { url } }\n      }\n      assemblyVideo: metafield(namespace: "custom", key: "assembly_video") { value }\n      expertReviews: metafield(namespace: "custom", key: "expert_reviews") {\n        references(first: 20) {\n          nodes {\n            ... on Metaobject {\n              fields {\n                key\n                value\n                reference {\n                  ... on MediaImage { image { url altText } }\n                  ... on Video { previewImage { url } sources { url mimeType } }\n                }\n              }\n            }\n          }\n        }\n      }\n      relatedArticles: metafield(namespace: "custom", key: "related_articles") {\n        references(first: 10) {\n          nodes {\n            ... on Article {\n              id\n              handle\n              title\n              excerpt\n              publishedAt\n              tags\n              image { url altText width height }\n              blog { handle title }\n            }\n          }\n        }\n      }\n      pdpBanner: metafield(namespace: "custom", key: "pdp_banner") {\n        reference {\n          ... on Metaobject {\n            heading: field(key: "heading") { value }\n            body: field(key: "body") { value }\n            buttonLabel: field(key: "button_label") { value }\n            buttonUrl: field(key: "button_url") { value }\n            image: field(key: "image") { reference { ... on MediaImage { image { url width height altText } } } }\n            mobileImage: field(key: "mobile_image") { reference { ... on MediaImage { image { url width height altText } } } }\n          }\n        }\n      }\n      reassurance: metafield(namespace: "custom", key: "reassurance") {\n        references(first: 8) {\n          nodes {\n            ... on Metaobject {\n              icon: field(key: "icon") { value }\n              label: field(key: "label") { value }\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  query ProductExtras($handle: String!, $country: CountryCode, $language: LanguageCode)\n  @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      faqJson: metafield(namespace: "pdp", key: "faq") { value }\n      specsJson: metafield(namespace: "pdp", key: "specs") { value }\n      faq: metafield(namespace: "custom", key: "frequently_asked_questions") {\n        reference { ... on Page { body } }\n      }\n      techSpecs: metafield(namespace: "custom", key: "technical_specifications") {\n        reference { ... on Page { body } }\n      }\n      resources: metafield(namespace: "pdp", key: "resources") {\n        reference {\n          ... on Metaobject {\n            ownersManual: field(key: "manual") { reference { ... on GenericFile { url } } }\n            assemblyVideo: field(key: "video") { value }\n          }\n        }\n      }\n      expertReviews: metafield(namespace: "pdp", key: "videos") {\n        references(first: 20) {\n          nodes {\n            ... on Metaobject {\n              fields {\n                key\n                value\n                reference {\n                  ... on MediaImage { image { url altText } }\n                  ... on Video { previewImage { url } sources { url mimeType } }\n                }\n              }\n            }\n          }\n        }\n      }\n      relatedArticles: metafield(namespace: "pdp", key: "articles") {\n        references(first: 10) {\n          nodes {\n            ... on Article {\n              id\n              handle\n              title\n              excerpt\n              publishedAt\n              tags\n              image { url altText width height }\n              blog { handle title }\n            }\n          }\n        }\n      }\n      pdpBanner: metafield(namespace: "pdp", key: "banner") {\n        reference {\n          ... on Metaobject {\n            heading: field(key: "heading") { value }\n            body: field(key: "body") { value }\n            buttonLabel: field(key: "button_label") { value }\n            buttonUrl: field(key: "button_url") { value }\n            image: field(key: "image") { reference { ... on MediaImage { image { url width height altText } } } }\n            mobileImage: field(key: "mobile_image") { reference { ... on MediaImage { image { url width height altText } } } }\n          }\n        }\n      }\n      policy: metafield(namespace: "pdp", key: "policy") {\n        reference { ... on Metaobject { reassurance: field(key: "reassurance") {\n        references(first: 8) {\n          nodes {\n            ... on Metaobject {\n              icon: field(key: "icon") { value }\n              label: field(key: "label") { value }\n              description: field(key: "description") { value }\n            }\n          }\n        }\n      } } } }\n    }\n  }\n': {
     return: ProductExtrasQuery;
     variables: ProductExtrasQueryVariables;
   };
-  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    availableForSale\n    isGiftCard\n    variantsCount { count }\n    priceRange { minVariantPrice { amount currencyCode } maxVariantPrice { amount currencyCode } }\n    compareAtPriceRange { minVariantPrice { amount currencyCode } maxVariantPrice { amount currencyCode } }\n    handlingDaysMin: metafield(namespace: "custom", key: "handling_days_min") { value }\n    handlingDaysMax: metafield(namespace: "custom", key: "handling_days_max") { value }\n    transitExtraDays: metafield(namespace: "custom", key: "transit_extra_days") { value }\n    popularSearches: metafield(namespace: "custom", key: "popular_searches") { value }\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    media(first: 10) {\n      nodes {\n        __typename\n        mediaContentType\n        ... on MediaImage {\n          id\n          image {\n            url\n            altText\n            width\n            height\n          }\n        }\n        ... on Video {\n          id\n          previewImage {\n            url\n            altText\n            width\n            height\n          }\n          sources {\n            url\n            mimeType\n            width\n            height\n          }\n        }\n      }\n    }\n    # Parents three levels deep, so the breadcrumb trail needs no extra requests.\n    collections(first: 10) {\n      nodes {\n        handle\n        title\n        parent: metafield(namespace: "custom", key: "parent_collection") {\n          reference {\n            ... on Collection {\n              handle\n              title\n              parent: metafield(namespace: "custom", key: "parent_collection") {\n                reference {\n                  ... on Collection {\n                    handle\n                    title\n                    parent: metafield(namespace: "custom", key: "parent_collection") {\n                      reference {\n                        ... on Collection {\n                          handle\n                          title\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    trustBadges: metafield(namespace: "custom", key: "trust_badges") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            fields {\n              key\n              value\n              reference {\n                ... on MediaImage {\n                  image {\n                    url\n                    altText\n                  }\n                }\n                ... on GenericFile {\n                  url\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    specs: metafield(namespace: "custom", key: "product_specs") {\n      references(first: 12) {\n        nodes {\n          ... on Metaobject {\n            fields {\n              key\n              value\n              reference {\n                ... on MediaImage {\n                  image {\n                    url\n                    altText\n                  }\n                }\n                ... on GenericFile {\n                  url\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n      requiresSellingPlan\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sellingPlanAllocations(first: 100) {\n      nodes {\n        priceAdjustments {\n          compareAtPrice {\n            amount\n            currencyCode\n          }\n          price {\n            amount\n            currencyCode\n          }\n        }\n        sellingPlan {\n          id\n          name\n          description\n          recurringDeliveries\n        }\n      }\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n': {
+  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    availableForSale\n    isGiftCard\n    variantsCount { count }\n    priceRange { minVariantPrice { amount currencyCode } maxVariantPrice { amount currencyCode } }\n    compareAtPriceRange { minVariantPrice { amount currencyCode } maxVariantPrice { amount currencyCode } }\n    policyDays: metafield(namespace: "pdp", key: "policy") {\n      reference {\n        ... on Metaobject {\n          handlingDaysMin: field(key: "handling_min") { value }\n          handlingDaysMax: field(key: "handling_max") { value }\n          transitExtraDays: field(key: "transit_extra") { value }\n        }\n      }\n    }\n    popularSearches: metafield(namespace: "custom", key: "popular_searches") { value }\n    pdpSteps: metafield(namespace: "pdp", key: "steps") { value }\n    ratingValue: metafield(namespace: "reviews", key: "rating") { value }\n    ratingCount: metafield(namespace: "reviews", key: "rating_count") { value }\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    media(first: 10) {\n      nodes {\n        __typename\n        mediaContentType\n        ... on MediaImage {\n          id\n          image {\n            url\n            altText\n            width\n            height\n          }\n        }\n        ... on Video {\n          id\n          previewImage {\n            url\n            altText\n            width\n            height\n          }\n          sources {\n            url\n            mimeType\n            width\n            height\n          }\n        }\n      }\n    }\n    # Parents three levels deep, so the breadcrumb trail needs no extra requests.\n    collections(first: 10) {\n      nodes {\n        handle\n        title\n        parent: metafield(namespace: "custom", key: "parent_collection") {\n          reference {\n            ... on Collection {\n              handle\n              title\n              parent: metafield(namespace: "custom", key: "parent_collection") {\n                reference {\n                  ... on Collection {\n                    handle\n                    title\n                    parent: metafield(namespace: "custom", key: "parent_collection") {\n                      reference {\n                        ... on Collection {\n                          handle\n                          title\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    policyBadges: metafield(namespace: "pdp", key: "policy") {\n      reference { ... on Metaobject { badges: field(key: "badges") {\n      references(first: 10) {\n        nodes {\n          ... on Metaobject {\n            fields {\n              key\n              value\n              reference {\n                ... on MediaImage {\n                  image {\n                    url\n                    altText\n                  }\n                }\n                ... on GenericFile {\n                  url\n                }\n              }\n            }\n          }\n        }\n      }\n    } } } }\n    specs: metafield(namespace: "custom", key: "product_specs") {\n      references(first: 12) {\n        nodes {\n          ... on Metaobject {\n            fields {\n              key\n              value\n              reference {\n                ... on MediaImage {\n                  image {\n                    url\n                    altText\n                  }\n                }\n                ... on GenericFile {\n                  url\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n      requiresSellingPlan\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sellingPlanAllocations(first: 100) {\n      nodes {\n        priceAdjustments {\n          compareAtPrice {\n            amount\n            currencyCode\n          }\n          price {\n            amount\n            currencyCode\n          }\n        }\n        sellingPlan {\n          id\n          name\n          description\n          recurringDeliveries\n        }\n      }\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
+  };
+  '#graphql\n  query VariantUrl($slug: String!, $country: CountryCode, $language: LanguageCode)\n  @inContext(country: $country, language: $language) {\n    metaobject(handle: {type: "pdp_variant_url", handle: $slug}) {\n      product: field(key: "product") {\n        reference {\n          ... on Product {\n            handle\n          }\n        }\n      }\n      options: field(key: "options") {\n        value\n      }\n    }\n  }\n': {
+    return: VariantUrlQuery;
+    variables: VariantUrlQueryVariables;
   };
   '#graphql\n  query AlgoliaProductsByIds(\n    $ids: [ID!]!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(country: $country, language: $language) {\n    nodes(ids: $ids) {\n      __typename\n      ... on Product {\n        ...ProductCardItem\n      }\n    }\n  }\n  #graphql\n  fragment ProductCardItem on Product {\n    id\n    handle\n    title\n    vendor\n    tags\n    availableForSale\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice { amount currencyCode }\n      maxVariantPrice { amount currencyCode }\n    }\n    compareAtPriceRange {\n      minVariantPrice { amount currencyCode }\n    }\n    cardBadge: metafield(namespace: "custom", key: "card_badge") {\n      value\n    }\n    cardSpecsText: metafield(namespace: "custom", key: "card_specs") {\n      value\n    }\n    cardSpecs: metafield(namespace: "custom", key: "product_specs") {\n      references(first: 4) {\n        nodes {\n          ... on Metaobject {\n            fields {\n              key\n              value\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant {\n      id\n      availableForSale\n      selectedOptions { name value }\n    }\n    options {\n      name\n      optionValues {\n        name\n        swatch {\n          color\n          image { previewImage { url } }\n        }\n      }\n    }\n  }\n\n': {
     return: AlgoliaProductsByIdsQuery;
@@ -3573,7 +3690,7 @@ interface GeneratedQueryTypes {
     return: StoreCollectionsQuery;
     variables: StoreCollectionsQueryVariables;
   };
-  '#graphql\n  query Catalog(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        ...CollectionItem\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment MoneyCollectionItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment CollectionItem on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyCollectionItem\n      }\n      maxVariantPrice {\n        ...MoneyCollectionItem\n      }\n    }\n  }\n\n': {
+  '#graphql\n  query Catalog(\n    $first: Int!\n    $after: String\n    $sortKey: ProductSortKeys\n    $reverse: Boolean\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, after: $after, sortKey: $sortKey, reverse: $reverse) {\n      nodes {\n        ...ProductCardItem\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment ProductCardItem on Product {\n    id\n    handle\n    title\n    vendor\n    tags\n    availableForSale\n    featuredImage {\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice { amount currencyCode }\n      maxVariantPrice { amount currencyCode }\n    }\n    compareAtPriceRange {\n      minVariantPrice { amount currencyCode }\n    }\n    cardBadge: metafield(namespace: "custom", key: "card_badge") {\n      value\n    }\n    cardSpecsText: metafield(namespace: "custom", key: "card_specs") {\n      value\n    }\n    cardSpecs: metafield(namespace: "custom", key: "product_specs") {\n      references(first: 4) {\n        nodes {\n          ... on Metaobject {\n            fields {\n              key\n              value\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant {\n      id\n      availableForSale\n      selectedOptions { name value }\n    }\n    options {\n      name\n      optionValues {\n        name\n        swatch {\n          color\n          image { previewImage { url } }\n        }\n      }\n    }\n  }\n\n': {
     return: CatalogQuery;
     variables: CatalogQueryVariables;
   };
@@ -3612,6 +3729,10 @@ interface GeneratedQueryTypes {
   '#graphql\n  query PredictiveSearch(\n    $country: CountryCode\n    $language: LanguageCode\n    $limit: Int!\n    $limitScope: PredictiveSearchLimitScope!\n    $term: String!\n    $types: [PredictiveSearchType!]\n  ) @inContext(country: $country, language: $language) {\n    predictiveSearch(\n      limit: $limit,\n      limitScope: $limitScope,\n      query: $term,\n      types: $types,\n    ) {\n      articles {\n        ...PredictiveArticle\n      }\n      collections {\n        ...PredictiveCollection\n      }\n      pages {\n        ...PredictivePage\n      }\n      products {\n        ...PredictiveProduct\n      }\n      queries {\n        ...PredictiveQuery\n      }\n    }\n  }\n  #graphql\n  fragment PredictiveArticle on Article {\n    __typename\n    id\n    title\n    handle\n    blog {\n      handle\n    }\n    image {\n      url\n      altText\n      width\n      height\n    }\n    trackingParameters\n  }\n\n  #graphql\n  fragment PredictiveCollection on Collection {\n    __typename\n    id\n    title\n    handle\n    image {\n      url\n      altText\n      width\n      height\n    }\n    trackingParameters\n  }\n\n  #graphql\n  fragment PredictivePage on Page {\n    __typename\n    id\n    title\n    handle\n    trackingParameters\n  }\n\n  #graphql\n  fragment PredictiveProduct on Product {\n    __typename\n    id\n    title\n    handle\n    trackingParameters\n    selectedOrFirstAvailableVariant(\n      selectedOptions: []\n      ignoreUnknownOptions: true\n      caseInsensitiveMatch: true\n    ) {\n      id\n      image {\n        url\n        altText\n        width\n        height\n      }\n      price {\n        amount\n        currencyCode\n      }\n    }\n  }\n\n  #graphql\n  fragment PredictiveQuery on SearchQuerySuggestion {\n    __typename\n    text\n    styledText\n    trackingParameters\n  }\n\n': {
     return: PredictiveSearchQuery;
     variables: PredictiveSearchQueryVariables;
+  };
+  '#graphql\n  query VariantSlugs($after: String) {\n    metaobjects(type: "pdp_variant_url", first: 250, after: $after) {\n      pageInfo { hasNextPage endCursor }\n      nodes {\n        handle\n        product: field(key: "product") {\n          reference {\n            ... on Product {\n              handle\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: VariantSlugsQuery;
+    variables: VariantSlugsQueryVariables;
   };
 }
 

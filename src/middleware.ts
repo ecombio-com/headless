@@ -1,6 +1,7 @@
 // Runs before every request (Next.js 16 "proxy", formerly middleware). Was server.ts on Oxygen.
 import {NextResponse, type NextRequest} from 'next/server';
-import {localeRedirect} from '~/core/config/i18n';
+import {DEFAULT_LOCALE, localeRedirect} from '~/core/config/i18n';
+import {isAuthHost} from '~/server/auth/hosts';
 
 const HOOKS_HOST = 'hooks.ecombio.com';
 const HOOKS_ALLOWED_PREFIXES = ['/api/webhooks', '/api/revalidate-menus', '/api/revalidate-product', '/api/cron', '/api/yotpo/webhook'];
@@ -13,6 +14,15 @@ export function middleware(request: NextRequest) {
   const onHooksHost = request.headers.get('host')?.split(':')[0].toLowerCase() === HOOKS_HOST;
   if (onHooksHost && !HOOKS_ALLOWED_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
     return new NextResponse('Not Found', {status: 404, headers: {'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex'}});
+  }
+
+  // auth.<brand>.com serves only sign-in (P1.4): the API, plus every other path shows the sign-in page.
+  const host = request.headers.get('host')?.split(':')[0].toLowerCase() ?? '';
+  if (isAuthHost(host) && !pathname.startsWith('/api/auth')) {
+    const target = new URL(`/${DEFAULT_LOCALE}/sign-in${url.search}`, request.url);
+    const headers = new Headers(request.headers);
+    headers.set('x-url', request.url);
+    return NextResponse.rewrite(target, {request: {headers}});
   }
 
   if (!onHooksHost && !pathname.startsWith('/api/')) {

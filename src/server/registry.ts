@@ -29,6 +29,7 @@ export const ROUTES: [string, () => Promise<any>][] = [
   ["/:locale/search", () => import('~/routes/search/server')],
   ["/robots.txt", () => import('~/routes/robots.txt/server')],
   ["/sitemap.xml", () => import('~/routes/sitemap.xml/server')],
+  ["/sitemap.xsl", () => import('~/routes/sitemap.xsl/server')],
   ["/:locale", () => import('~/routes/_index/server')],
   ["/:locale/account/*", () => import('~/routes/account.$/server')],
   ["/:locale/*", () => import('~/routes/$/server')],
