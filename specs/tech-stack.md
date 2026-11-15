@@ -1,61 +1,93 @@
 # Tech stack
 
-> Current stack as-is. Items marked **verify** were inferred and need confirming.
+Part of the Headless constitution. Read `mission.md` first.
+Facts below were read from the repo on 2026-11-14 (commit `f54a9a8` + local changes).
 
-## Runtime and hosting
-| Layer | Technology | Role / notes |
-|---|---|---|
-| Framework | Next.js 16 (App Router, Turbopack dev) | `src/app/[locale]/...`; legacy Remix/Hydrogen-style `src/routes/*` with `server.ts` + `view.tsx` pairs behind `src/compat` |
-| Language | TypeScript (strict) | `tsc --noEmit` is the type gate |
-| Hosting | Cloudflare Workers via `@opennextjs/cloudflare` | One Worker per brand (`headless-<brand>`) |
-| Tooling | Wrangler 4, pnpm workspace | `wrangler.jsonc` holds per-brand environments |
-| Images | Cloudflare Images binding (`IMAGES`) | |
-| Styling | Tailwind CSS 4, `tw-animate-css`, `@tailwindcss/typography` | Tokens in `src/styles/tokens.css` |
-| UI | Local `src/components/ui/*`, `@base-ui/react`, lucide-react, sonner | |
+## 1. The stack at a glance
 
-## Data and commerce
-| Layer | Technology | Role / notes |
-|---|---|---|
-| Catalog / content | Shopify Storefront API | Typed via `storefrontapi.generated.d.ts` |
-| Customer accounts | Shopify Customer Account API | `src/server/customer-account.ts`, `src/graphql/customer-account/*` |
-| Admin access | Shopify Admin API | `src/server/auth/shopify-admin.ts` (client ID in env, secret in Worker secrets) |
-| Checkout | Stripe (test mode) + `@shopify/checkout-kit` | Webhook at `/api/stripe/webhook` |
-| Cart | `@shopify/hydrogen-react` helpers | |
+| Layer | Tool | Version | One per brand? |
+| --- | --- | --- | --- |
+| Commerce backend | Shopify, live store khkkyb-b8 (ecombio-store) | Storefront API, Admin API | Headless-channel storefront + tokens: **yes**. Store: shared |
+| Framework | Next.js (App Router) + React | 16.4.6 / 19.3.1 | Shared code |
+| Styling | Tailwind CSS + design tokens (`src/styles/tokens.css`) | 4.x | Shared; per-brand tokens via `data-brand` |
+| UI parts | Base UI, lucide-react, sonner | 1.8 / 1.47 / 2.0 | Shared |
+| Shopify UI helpers | `@shopify/hydrogen-react` | 2026.4.4 | Shared |
+| Host | Cloudflare Workers via OpenNext (`@opennextjs/cloudflare`) | 1.20.x, wrangler 4.161 | Worker `headless-<brand>`: **yes** |
+| DNS + TLS + security | Cloudflare zones | Free plan | Zone `<brand>.com`: **yes** |
+| Code + deploys | GitHub `ecombio-com/headless`, GitHub Actions | Node 22, pnpm 12 | Environment `<brand>`: **yes**. Repo: shared |
+| Payments | Stripe (Payment Element, `@stripe/stripe-js`) | 10.x | Webhook endpoint: **yes**. Account + keys: shared |
+| Order creation | ECOMBIOv2 Shopify app (client credentials → Admin `orderCreate`) | — | Shared |
+| Reviews | Yotpo | — | Shared |
+| Customer sign-in | Better Auth on `auth.<brand>.com` + Cloudflare D1 | 1.7.25 (pinned) | D1 database + auth host: **yes** |
+| Transactional email | Brevo transactional API (free: 300/day) | v3 | Sender `no-reply@<brand>.com`: **yes**. API key: shared |
+| Search (PLP) | Shopify Storefront search + Search & Discovery (filters, synonyms, boosts) now; Algolia later (built, `ALGOLIA_ENABLED=false`) once its index holds live-store products per brand | — | Shared; results scoped per brand |
+| Analytics | GA4 (with consent banner) | — | Shared |
+| Validation | zod | 4.x | Shared |
+| Ops CLIs | `cf` (Cloudflare API: DNS, zones, rules, email), `wrangler` (Workers, secrets, logs), `gh`, `stripe` | cf 1.0 beta | Shared |
+| Spec-Driven Development | GitHub Spec Kit (`specify` CLI, `.specify/`, `/speckit-*` skills in `.claude/skills/`) | 1.4.0 | Shared |
 
-## Authentication
-- **Better Auth**, email + password only. No social providers, no plugins.
-- Server: `src/server/auth/index.ts` (per-host instance cache, `trustedOrigins` from `hosts.ts`).
-- Route: `src/app/api/auth/[...all]/route.ts`. Client: `src/lib/auth-client.ts`.
-- Storage: Cloudflare D1, one database per brand, binding `AUTH_DB`; schema in `migrations/auth/0001_better_auth.sql`.
-- Extra user field: `shopifyCustomerId` (linking to Shopify customers).
-- Sessions: Better Auth defaults (cookie + `session` table). Cross-subdomain cookies are currently **off** (see roadmap).
+## 2. How a request flows
 
-## Third-party services
-| Service | Use |
-|---|---|
-| Algolia | Search (search-only key in env) |
-| Yotpo | Reviews and UGC |
-| Klaviyo | Newsletter / marketing |
-| Google Analytics 4 | Analytics with consent banner |
-| Intercom messenger SDK | Support chat (**verify** it is in use) |
+```
+Shopper → Cloudflare (DNS, TLS, security rules) → Worker headless-<brand>
+        → Next.js page (Server Component) → Shopify Storefront API (+ Yotpo)
+        → HTML streamed back
+Checkout: /cart → /address → /payment (Stripe Payment Element) → /payment/complete
+        → Admin orderCreate on khkkyb-b8 (paid order, tagged storefront=<brand>)
+        → Stripe webhook /api/stripe/webhook = backup that creates the order if the shopper never returns
+```
 
-## Process and tooling
-- Spec Kit 1.4.0 (`.specify/`, `.claude/skills/speckit-*`), constitution v1.0.0 in `.specify/memory/`.
-- Brand scripts in `scripts/` (PowerShell): `cf-zone`, `cf-email`, `check-brand`, `set-brand-env`, `set-brand-secrets`, `enable-auth`, `set-auth-secrets`.
-- Env files: `.env.<brand>`, `.env.production`, `.env.local` are **untracked**; only `.env.example` is committed.
+## 3. How the brand is chosen
 
-## Decisions log
-| Decision | Why |
-|---|---|
-| One Worker and one D1 per brand | Isolation of secrets, data and deploys |
-| Email + password only | Simplest sign-in surface; OTP, Google and email-sending removed |
-| Env files untracked | Public repo; only public-by-design values had been committed earlier |
-| Per-host auth instance cache | Bindings are fixed per isolate; `baseURL` differs per host |
+- Each Worker is built from `.env.<brand>` (copied to `.env.production.local` in CI) and has `BRAND=<brand>`.
+- `src/core/config/storefronts.ts` → `getStorefrontConfig()` reads `BRAND` first, then falls back to the old Hydrogen storefront ID, then to ecombio.
+- The config gives: name, menus (`<brand>-main`, `<brand>-footer`), home collection (`<brand>-all`).
+- `src/brands/layouts.ts` picks the header and footer per brand. Scooter and Skater reuse BicycleBio's for now.
+- Handles prefixed with another brand (`scooterbio-…`) return 404 on this brand (`isOtherBrandHandle`).
 
-## Known issues
-- 11 `implicit any` type errors in `product-view.tsx`, `product.ts`, `product-cross-sell.ts` (likely from regenerated `storefrontapi.generated.d.ts`).
-- Next.js reports the `middleware` file convention as deprecated in favor of `proxy`.
+Setting precedence at runtime: **Worker secrets/vars > `.env.<brand>`** (OpenNext fills only what's missing).
 
-## Requirements
-**Minimum:** Node (Next 16 minimum, **verify**), pnpm, Wrangler 4, a Cloudflare account with Workers + D1, Shopify Storefront and Customer Account API access, Stripe test keys.
-**Recommended:** Workers paid plan, a staging Worker per brand, CI with `tsc --noEmit`, secret management only through the `set-*-secrets.ps1` scripts.
+## 4. Repo layout
+
+| Folder | What it holds | Rule |
+| --- | --- | --- |
+| `src/core/` | Shopify client, cart, storefront + brand config, locales | No `next/*` or `react` imports |
+| `src/server/` | Next.js glue: request context, session, Customer Account login, route runner | Server only |
+| `src/app/` | Next.js routes (25 page files: native pages + generated wrappers) | Native pages hand-written; generated ones via `scripts/gen-app.py` |
+| `src/features/` | Native page logic (product, collection, blog, pages) | New pages go here with `definePage` |
+| `src/routes/` | 35 routes ported from Hydrogen (`server.ts` + `view.tsx`) | Being retired, one area at a time |
+| `src/compat/` | Stand-ins for `react-router` / `@shopify/hydrogen` (79 files still import it) | New code never imports it |
+| `src/components/`, `src/lib/` | UI and helpers | `'use client'` only where interactive |
+| `src/@yotpo/`, `src/@algolia/` | Integrations, each with its own config + client | Fail safely when the service is down |
+| `src/brands/` | Per-brand layouts and registry | Brand differences live here, not in branches |
+| `scripts/` | `check-brand.ps1`, `set-brand-env.ps1`, `set-brand-secrets.ps1`, `cf-zone.ps1` (add, list, free, harden), `cf-email.ps1` (parked) | Read-only checks first; secrets masked; confirm before deletes |
+| `docs/` | `brand-launch.md` (the 9-step brand workflow) | — |
+| `specs/`, `validation/`, `plan.md` | Constitution, specs, test records, implementation plan | spec → build → validate → plan |
+| `specs/brands/<brand>/` | One brand feature: specification, implementation, validation | Updated with every brand change |
+
+Size: about 400 source files, 33,000 lines.
+
+## 5. Why this is the right composition
+
+| Choice | Why it fits the mission | Trade-off we accept |
+| --- | --- | --- |
+| **Headless Shopify** (not a Liquid theme) | Own UI per brand, own checkout flow, while Shopify keeps catalog, orders, inventory and tax | We maintain the storefront code; theme-only apps (Klaviyo embed, Swell, Usercentrics) don't load |
+| **One Shopify store, one Headless storefront per brand** | One admin, one catalog, one order list; each brand still has its own keys and channel | Brand scoping depends on tags, collections and handle prefixes being kept clean |
+| **Next.js App Router** | Server Components keep pages fast and SEO-friendly; largest ecosystem; we already had a Next.js base (Vercel Shop) | Needs an adapter (OpenNext) to run on Workers |
+| **Cloudflare Workers** (not Oxygen, not Vercel) | DNS for the brands already lives on Cloudflare; custom domains get TLS automatically; one Worker per brand isolates failures; low cost; runs at the edge | Free plan caps subrequests per request (Yotpo warning); caching must be set up (checklist C1) |
+| **One repo, GitHub Environments per brand** | Fix once, ship to every brand; per-brand deploy history; no branch drift | One push deploys all brands, so `main` must stay green |
+| **Stripe for payment, Shopify for the order** | Payment form inside our own page (no popup), Stripe Link and wallets; the order still lands in Shopify as Paid | Two systems to reconcile (refunds, disputes); `STRIPE_CHECKOUT_ENABLED` switches back to Shopify's hosted checkout |
+| **Scripts + CLIs** (`cf`, `wrangler`, `gh`, `stripe`) | Repeatable, terminal-only, masked secrets; a brand launch is copy-paste; no AI assistant in the loop | Dashboard-only steps left: creating a Shopify Headless storefront, Shopify domain settings |
+
+## 6. Known gaps (owned by `checklist.md` and `plan.md`)
+
+- No persistent cache yet (OpenNext incremental cache not configured) → Yotpo "Too many subrequests".
+- Compat layer still in use; generated routes still exist.
+- No error pages, no security headers, no automated tests.
+- Customer sign-in (Better Auth, P1.4) not built yet; Customer Account API flow still live.
+- Stripe in test mode; live keys and key rotation at public launch.
+
+## 7. Rules for changing the stack
+
+- Adding or swapping a tool is a §3 re-planning trigger in `plan.md`: write the decision in `plan.md` §6 and update this file in the same change.
+- Pin versions that touch payments or Shopify APIs; upgrade on purpose, not by accident.
