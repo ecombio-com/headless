@@ -23,6 +23,8 @@ Repo: `ecombio-com/headless` · Host: Cloudflare Worker `ecombio-headless` · Up
 
 Flow for every feature: **spec → build → validate → update plan**.
 
+Brand features keep all three in one folder: `specs/brands/<brand>/specification.md`, `implementation.md`, `validation.md`.
+
 1. Copy `specs/_template.md` and write the spec before any code. Link it on the task's `Spec:` line.
 2. Build it. Mark the task `[~]`, then `[v]` when built.
 3. Copy `validation/_template.md` and record a run. Link it on the task's `Validated:` line.
@@ -158,10 +160,10 @@ Re-plan steps: name the trigger → list the options → pick one → update §4
   - [ ] P1.6.4 `.env.production`: stop tracking it or keep only non-secret prod values (ties to P1.2.1)
   - Validate: headless.bicyclebio.com returns 200, `data-brand="bicyclebio"`, product links from khkkyb-b8, no `ecombio.myshopify.com` in the HTML
   - Validated: 2026-11-14 PASS (commit 1acf964). Note: workers.dev now returns 1042 (off once a custom domain is set); headless.bicyclebio.com is the test host
-- [ ] **P1.7 SkaterBio on skaterbio.com** — follow docs/brand-launch.md steps 2–9
+- [x] **P1.7 SkaterBio on skaterbio.com** — follow docs/brand-launch.md steps 2–9
   - Validate: check-brand.ps1 -Brand skaterbio = 0 failed; test order lands in Shopify
-  - Validated: —
-- [ ] **P1.8 ScooterBio on scooterbio.com** — docs/brand-launch.md steps 1–9 (DNS moves to Cloudflare first)
+  - Validated: specs/brands/skaterbio/validation.md (12/12, order #1005)
+- [~] **P1.8 ScooterBio on scooterbio.com** — docs/brand-launch.md steps 1–9 (DNS moves to Cloudflare first)
   - Validate: check-brand.ps1 -Brand scooterbio = 0 failed; test order lands in Shopify
   - Validated: —
 - [ ] **P1.5 Repo hygiene**
@@ -253,6 +255,7 @@ Newest first. One line each: date · trigger · decision · what changed in this
 
 | Date | Trigger | Decision | Plan change |
 | --- | --- | --- | --- |
+| 2026-11-14 | New request (§3.5) | Constitution confirmed by the owner: mission = brand family only (ecombio.com stays on Hydrogen); PLP search = Shopify now, Algolia later; after ScooterBio, brand look comes before PLP and PDP. Roadmap rewritten as 22 small phases; README gains the PLP structure | specs/roadmap.md, tech-stack.md, mission.md, README.md |
 | 2026-11-14 | Finding changes a decision (§3.3): "ScooterBio event" | scooterbio.com is registered through Shopify on the dev store (can't pay renewals; no nameserver option). ScooterBio stays Headless like the other brands. Shopify's DNS settings allow a nameserver change, so: nameservers → Cloudflare now (fast), 20 email forwards → Cloudflare Email Routing, then transfer the registration to Cloudflare Registrar before it expires (Jan 25, 2027) | P1.8 unblocked once Cloudflare DNS is active |
 | 2026-11-14 | New request (§3.5) | Stripe checkout on bicyclebio.com now, test mode first (BicycleBio only); live keys only after a test order lands in Shopify | P2.4 runs on headless-bicyclebio ahead of M1 |
 | 2026-11-14 | New request (§3.5) | One codebase, one Worker per brand (headless-bicyclebio, -scooterbio, -skaterbio) via Wrangler environments; each brand gets its own Shopify Headless-channel storefront; brand picked by BRAND env var; ecombio-headless and placeholder bicyclebio-headless to be deleted | wrangler.jsonc env.bicyclebio, deploy.yml matrix, .env.bicyclebio |
@@ -269,6 +272,7 @@ Newest first. One line per update: date · item ID · what changed · validation
 
 | Date | Item | Change | Validation |
 | --- | --- | --- | --- |
+| 2026-11-14 | P1.6–P1.8 | Brand features documented in specs/brands/<brand>/ (specification, implementation, validation); SkaterBio done (#1005); ScooterBio in progress | — |
 | 2026-11-14 | — | Constitution added: specs/mission.md, specs/tech-stack.md, specs/roadmap.md; linked from CLAUDE.md | — |
 | 2026-11-14 | P1.7–P1.8 | Wrote docs/brand-launch.md + scripts set-brand-env.ps1, set-brand-secrets.ps1; prepared wrangler env + .env files for skaterbio, scooterbio; deploy matrix fail-fast off | — |
 | 2026-11-14 | P2.4 | Stripe test order on bicyclebio.com: PI succeeded $1,091.41 → Shopify order #1004 (Paid, storefront=bicyclebio, via ECOMBIOv2); webhook 200; check-brand.ps1 12/12. Findings: order says "Shipping not required"; trade-in links shown (no trade-in program); Yotpo subrequest warning on PDP | PASS (test mode) |

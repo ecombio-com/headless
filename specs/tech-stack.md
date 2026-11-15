@@ -18,9 +18,10 @@ Facts below were read from the repo on 2026-11-14 (commit `f54a9a8` + local chan
 | Payments | Stripe (Payment Element, `@stripe/stripe-js`) | 10.x | Webhook endpoint: **yes**. Account + keys: shared |
 | Order creation | ECOMBIOv2 Shopify app (client credentials → Admin `orderCreate`) | — | Shared |
 | Reviews | Yotpo | — | Shared |
-| Search | Algolia (built, off: `ALGOLIA_ENABLED=false`) | — | Shared |
+| Search (PLP) | Shopify Storefront search + Search & Discovery (filters, synonyms, boosts) now; Algolia later (built, `ALGOLIA_ENABLED=false`) once its index holds live-store products per brand | — | Shared; results scoped per brand |
 | Analytics | GA4 (with consent banner) | — | Shared |
 | Validation | zod | 4.x | Shared |
+| Ops CLIs | `cf` (Cloudflare API: DNS, zones, rules, email), `wrangler` (Workers, secrets, logs), `gh`, `stripe` | cf 1.0 beta | Shared |
 
 ## 2. How a request flows
 
@@ -56,9 +57,10 @@ Setting precedence at runtime: **Worker secrets/vars > `.env.<brand>`** (OpenNex
 | `src/components/`, `src/lib/` | UI and helpers | `'use client'` only where interactive |
 | `src/@yotpo/`, `src/@algolia/` | Integrations, each with its own config + client | Fail safely when the service is down |
 | `src/brands/` | Per-brand layouts and registry | Brand differences live here, not in branches |
-| `scripts/` | `check-brand.ps1`, `set-brand-env.ps1`, `set-brand-secrets.ps1` | Read-only checks first; secrets masked |
+| `scripts/` | `check-brand.ps1`, `set-brand-env.ps1`, `set-brand-secrets.ps1`, `cf-zone.ps1` (add, list, free, harden), `cf-email.ps1` (parked) | Read-only checks first; secrets masked; confirm before deletes |
 | `docs/` | `brand-launch.md` (the 9-step brand workflow) | — |
 | `specs/`, `validation/`, `plan.md` | Constitution, specs, test records, implementation plan | spec → build → validate → plan |
+| `specs/brands/<brand>/` | One brand feature: specification, implementation, validation | Updated with every brand change |
 
 Size: about 400 source files, 33,000 lines.
 
@@ -72,7 +74,7 @@ Size: about 400 source files, 33,000 lines.
 | **Cloudflare Workers** (not Oxygen, not Vercel) | DNS for the brands already lives on Cloudflare; custom domains get TLS automatically; one Worker per brand isolates failures; low cost; runs at the edge | Free plan caps subrequests per request (Yotpo warning); caching must be set up (checklist C1) |
 | **One repo, GitHub Environments per brand** | Fix once, ship to every brand; per-brand deploy history; no branch drift | One push deploys all brands, so `main` must stay green |
 | **Stripe for payment, Shopify for the order** | Payment form inside our own page (no popup), Stripe Link and wallets; the order still lands in Shopify as Paid | Two systems to reconcile (refunds, disputes); `STRIPE_CHECKOUT_ENABLED` switches back to Shopify's hosted checkout |
-| **Scripts + CLIs** (wrangler, gh, stripe) | Repeatable, terminal-only, masked secrets; a brand launch is copy-paste | Two dashboard-only steps remain: Shopify storefront creation, Cloudflare security rules |
+| **Scripts + CLIs** (`cf`, `wrangler`, `gh`, `stripe`) | Repeatable, terminal-only, masked secrets; a brand launch is copy-paste; no AI assistant in the loop | Dashboard-only steps left: creating a Shopify Headless storefront, Shopify domain settings |
 
 ## 6. Known gaps (owned by `checklist.md` and `plan.md`)
 

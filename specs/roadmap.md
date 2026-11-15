@@ -1,57 +1,44 @@
 # Roadmap
 
-Part of the Headless constitution. `roadmap.md` = phases and outcomes. `plan.md` = the tasks, status and log.
+Part of the Headless constitution. `roadmap.md` = the order of work, in very small phases. `plan.md` = tasks, status and log. Brand proof lives in `specs/brands/<brand>/`.
+Each phase is a few sittings at most and ends with something you can see or check.
 Status marks: DONE✅ · IN PROGRESS⚠️ · NOT STARTED❌
 
-## Phase 0. Foundation: the codebase exists — DONE✅
-- Hydrogen storefront ported to Next.js 16; build passes (commit `65891fe`).
-- OpenNext Cloudflare adapter; deploy through GitHub Actions.
+## Done
+| # | Phase | Done when | Status |
+| --- | --- | --- | --- |
+| 0 | Codebase: Hydrogen ported to Next.js 16 on Cloudflare Workers | Build passes, deploys from GitHub | DONE✅ |
+| 1 | BicycleBio live (Stripe test mode) | check-brand 12/12, test order #1004 | DONE✅ |
+| 2 | Brand workflow + scripts (`docs/brand-launch.md`, `scripts/`) | A brand launches by copy-paste | DONE✅ |
+| 3 | SkaterBio live | check-brand 12/12, test order #1005 | DONE✅ |
 
-## Phase 1. First brand live: bicyclebio.com — DONE✅ (2026-11-14)
-- One Worker per brand (`headless-bicyclebio`), Shopify Headless storefront, GitHub Environment.
-- bicyclebio.com + www on the Worker; Always Use HTTPS; Bot Fight Mode off; webhook skip rule (confirm it was saved).
-- Stripe checkout in test mode; test order #1004 landed in Shopify as Paid.
-- `scripts/check-brand.ps1`: 12/12 PASS. Workflow recorded in `docs/brand-launch.md`.
-- Plan items: P1.6, P2.4 (test mode).
+## Next, in order
+| # | Phase | Done when | Status |
+| --- | --- | --- | --- |
+| 4 | ScooterBio: Shopify lets go of www (remove dev-store subdomains) | www.scooterbio.com shows the Worker | IN PROGRESS⚠️ |
+| 5 | ScooterBio: Stripe webhook on www, hardening, check, test order | check-brand 0 failed, test order in Shopify | NOT STARTED❌ |
+| 6 | ScooterBio: registration → Cloudflare Registrar, 20 email forwards → Email Routing | Root serves the Worker; email still arrives | NOT STARTED❌ |
+| 7 | Clean-up of the 3 launches: cancel test orders, bikes ship ("physical product"), remove trade-in links | Orders list clean; no trade-in anywhere | NOT STARTED❌ |
+| 8 | Brand look 1: brand registry holds name, logo, colors per brand | Each brand shows its own name and logo | NOT STARTED❌ |
+| 9 | Brand look 2: menus from Shopify (`<brand>-main`, `<brand>-footer`) per brand | No e-bike menu on SkaterBio or ScooterBio | NOT STARTED❌ |
+| 10 | Brand look 3: own header and footer for SkaterBio and ScooterBio | Each brand has its own layout | NOT STARTED❌ |
+| 11 | Brand look 4: home page per brand (hero, hubs, deals from `<brand>-all`) | Home shows only that brand's products | NOT STARTED❌ |
+| 12 | PLP 1: brand scope on /collections/all, search and sitemap | No other brand's products listed | NOT STARTED❌ |
+| 13 | PLP 2: hub pages per brand (tiles, hero, deals, guides) | Each brand's hubs render with their own metafields | NOT STARTED❌ |
+| 14 | PLP 3: filters, sort, empty state, product cards (badge, specs, stars) | README PLP checklist passes on 375px and 1440px | NOT STARTED❌ |
+| 15 | Speed: persistent cache + Workers Paid; one Yotpo call per page | No "Too many subrequests" in `wrangler tail` | NOT STARTED❌ |
+| 16 | PDP 1: read `pdp.*` metafields (P3.0) | Specs, FAQ, variants show from `pdp.*` | NOT STARTED❌ |
+| 17 | PDP 2: step picker, recap sheets, banner, badges, variant URLs (P3.1) | Matches the Hydrogen PDP | NOT STARTED❌ |
+| 18 | Customer sign-in on every brand domain (P1.4) | Sign in, orders, sign out on each brand | NOT STARTED❌ |
+| 19 | Quality: error pages, security headers, noindex on non-brand hosts | checklist C5, D2, D4 closed | NOT STARTED❌ |
+| 20 | Search on Algolia (index per brand from the live store) | Search and filters served by Algolia | NOT STARTED❌ |
+| 21 | Go live: Stripe live keys + live webhooks, rotate every key | One real order and refund per brand | NOT STARTED❌ |
+| 22 | Watch two weeks: `wrangler tail`, Search Console, GA4 | Two clean weeks on all three brands | NOT STARTED❌ |
 
-## Phase 2. BicycleBio polish — IN PROGRESS⚠️
-- Bikes marked as physical products (order said "Shipping not required").
-- Trade-in links removed (no trade-in program).
-- Test order #1004 cancelled.
-- Customer sign-in on bicyclebio.com (P1.4).
-- Persistent cache + Workers Paid decision (checklist C1, P1.3), ending the Yotpo subrequest warning (P2.2).
-- Done when: check script passes, a second test order ships correctly, sign-in works.
-
-## Phase 3. Brand family: skaterbio.com, then scooterbio.com — NOT STARTED❌
-- SkaterBio first (DNS already on Cloudflare): `docs/brand-launch.md` steps 2–9 (P1.7).
-- ScooterBio second (move DNS from Google Domains to Cloudflare first): steps 1–9 (P1.8).
-- Shopify content per brand: menus `<brand>-main` / `<brand>-footer`, collection `<brand>-all`, products on the Headless channel.
-- Done when: each brand passes the check script and a test order lands in Shopify.
-
-## Phase 4. Product depth: PDP and pages — NOT STARTED❌ (P3.0 started early)
-- PDP reads `pdp.*` metafields; step picker, variant URLs, recap sheets, banner, reassurance bar (P3.0, P3.1).
-- Pages, blogs, collections and home brought up to the Hydrogen reference (P3.2–P3.4).
-- Each brand gets its own look (tokens, header, home), starting with BicycleBio.
-- Done when: every Hydrogen-only gap is closed or dropped on purpose.
-
-## Phase 5. Quality and trust — NOT STARTED❌
-- Error pages, security headers, robots/noindex on non-brand hosts, canonical URLs (checklist C5, D2, D4, F2).
-- Screen sizes, keyboard access, speed (P4.1–P4.3).
-- Search on (Algolia), Shopify analytics events, consent gating (P2.3, P2.5).
-- Automated smoke tests in CI (checklist D10), typecheck before deploy (C4).
-
-## Phase 6. Go live for real — NOT STARTED❌
-- Live Stripe keys and a live webhook per brand.
-- Rotate every key and secret (Shopify apps, Stripe, Algolia, Yotpo, Klaviyo).
-- One real order and refund per brand.
-- Watch two weeks: `wrangler tail`, Search Console, GA4 (P5.4).
-- Done when: two clean weeks on all three brands.
-
-## Phase 7. After launch — NOT STARTED❌
-- Remove the compat layer and generated routes (P6.1).
-- Clean up unused metafields and metaobjects (P6.3).
-- Bring back extras: Klaviyo, llms.txt, shop agent, Spanish, bundles, gift cards, expert reviews (P6.2).
-- Decide whether ecombio.com joins this repo.
+## Later
+- Blogs and pages per brand (README "Blogs", "Pages").
+- Remove the compat layer and generated routes (P6.1); clean unused metafields (P6.3).
+- Brand email for every brand (P6.4).
 
 ## Holiday freeze
 - Nov 25 – Dec 1: no live-store changes during BFCM.

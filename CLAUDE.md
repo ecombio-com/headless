@@ -13,7 +13,7 @@ Next.js 16 App Router, React 19, Tailwind 4, pnpm. Ported from the Hydrogen repo
 
 ## Constitution (read first)
 - `specs/mission.md` (why), `specs/tech-stack.md` (how), `specs/roadmap.md` (when). Every spec and change must fit them; changing them is a plan.md §3 re-plan.
-- Brand launches follow `docs/brand-launch.md`.
+- Brand launches follow `docs/brand-launch.md`. Each brand's specification, implementation and validation live in `specs/brands/<brand>/`; update them with every brand change.
 
 ## plan.md (required)
 - `plan.md` is the source of truth for the launch. Read §0 Rules at the start of every session.

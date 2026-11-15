@@ -1,7 +1,7 @@
 # Mission
 
 Part of the Headless constitution: `mission.md` (why), `tech-stack.md` (how), `roadmap.md` (when).
-Every spec, plan item and code change must fit these three files. If one doesn't, change the constitution first, on purpose.
+Every spec, plan item and code change must fit these three files. Each brand is a feature in `specs/brands/<brand>/` (specification, implementation, validation). If one doesn't, change the constitution first, on purpose.
 
 ## 1. Mission
 
@@ -25,9 +25,9 @@ Every spec, plan item and code change must fit these three files. If one doesn't
 
 | Brand | Domain | Sells | Status |
 | --- | --- | --- | --- |
-| BicycleBio | bicyclebio.com | Electric bikes and bikes | Live (Stripe test mode), 2026-11-14 |
-| SkaterBio | skaterbio.com | Electric skateboards and skateboards | Not started (docs/brand-launch.md) |
-| ScooterBio | scooterbio.com | Electric scooters and kick scooters | Not started (DNS must move to Cloudflare first) |
+| BicycleBio | bicyclebio.com | Electric bikes and bikes | Live (Stripe test mode), 2026-11-14 · `specs/brands/bicyclebio/` |
+| SkaterBio | skaterbio.com | Electric skateboards and skateboards | Live (Stripe test mode), 2026-11-14 · `specs/brands/skaterbio/` |
+| ScooterBio | scooterbio.com | Electric scooters and kick scooters | In progress: Shopify still holds www and the root · `specs/brands/scooterbio/` |
 | ecombio | ecombio.com | Everything (general-purpose parent) | Stays on Hydrogen/Oxygen; not served by this repo today |
 
 ## 5. Principles (non-negotiable)
@@ -51,6 +51,6 @@ Every spec, plan item and code change must fit these three files. If one doesn't
 
 ## 7. Out of scope (for now)
 
-- Serving ecombio.com from this repo.
+- Serving ecombio.com from this repo (confirmed 2026-11-14: brand family only; ecombio.com stays on Hydrogen).
 - Leaving Shopify for catalog or orders.
 - A separate database of our own (customers, analytics). Revisit after launch.
