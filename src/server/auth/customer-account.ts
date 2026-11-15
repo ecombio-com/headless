@@ -96,6 +96,7 @@ export function createBetterAuthCustomerAccount({env, request}: {env: Env; reque
     const email = session.user.email;
     const found = await adminGraphql(env, Q.findCustomer, {q: `email:"${email.replace(/"/g, '')}"`});
     let gid: string | undefined = found.customers.nodes[0]?.id;
+    if (!gid && env.AUTH_ALLOW_CUSTOMER_CREATE !== 'true') throw new Error('Shopify customer create needs the owner go-ahead (FR-009). Set AUTH_ALLOW_CUSTOMER_CREATE=true to allow it.');
     if (!gid) {
       const created = await adminGraphql(env, Q.createCustomer, {input: {email}});
       const errs = created.customerCreate.userErrors;
