@@ -84,10 +84,14 @@ Size: about 400 source files, 33,000 lines.
 - No persistent cache yet (OpenNext incremental cache not configured) → Yotpo "Too many subrequests".
 - Compat layer still in use; generated routes still exist.
 - No error pages, no security headers, no automated tests.
-- Customer sign-in (Better Auth, P1.4) not built yet; Customer Account API flow still live.
+- Customer sign-in (Better Auth, P1.4, email + password) is built on `feat/customer-sign-in` but not merged or deployed; Customer Account API flow still live.
 - Stripe in test mode; live keys and key rotation at public launch.
 
 ## 7. Rules for changing the stack
 
 - Adding or swapping a tool is a §3 re-planning trigger in `plan.md`: write the decision in `plan.md` §6 and update this file in the same change.
 - Pin versions that touch payments or Shopify APIs; upgrade on purpose, not by accident.
+
+## 8. Change log
+
+- 2026-11-15: Better Auth simplified to email + password only (no Google, no email OTP, no plugins). The Brevo sender was used for sign-in codes; confirm whether anything else still uses it before removing it from the table above.
