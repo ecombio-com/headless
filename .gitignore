@@ -14,3 +14,6 @@ next-env.d.ts
 dev.log
 backups
 search-baseline
+
+# Claude Code: keep shared skills, ignore personal settings
+.claude/settings.local.json

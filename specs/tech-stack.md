@@ -22,6 +22,7 @@ Facts below were read from the repo on 2026-11-14 (commit `f54a9a8` + local chan
 | Analytics | GA4 (with consent banner) | — | Shared |
 | Validation | zod | 4.x | Shared |
 | Ops CLIs | `cf` (Cloudflare API: DNS, zones, rules, email), `wrangler` (Workers, secrets, logs), `gh`, `stripe` | cf 1.0 beta | Shared |
+| Spec-Driven Development | GitHub Spec Kit (`specify` CLI, `.specify/`, `/speckit-*` skills in `.claude/skills/`) | 1.4.0 | Shared |
 
 ## 2. How a request flows
 

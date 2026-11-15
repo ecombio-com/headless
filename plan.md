@@ -255,6 +255,7 @@ Newest first. One line each: date · trigger · decision · what changed in this
 
 | Date | Trigger | Decision | Plan change |
 | --- | --- | --- | --- |
+| 2026-11-14 | New tool (§3.3) | Adopt GitHub Spec Kit 1.4.0 for Spec-Driven Development; `.specify/memory/constitution.md` v1.0.0 ratified from specs/mission.md (9 principles); new features use /speckit-* and live in specs/NNN-feature/ | CLAUDE.md, tech-stack.md, .gitignore |
 | 2026-11-14 | New request (§3.5) | Constitution confirmed by the owner: mission = brand family only (ecombio.com stays on Hydrogen); PLP search = Shopify now, Algolia later; after ScooterBio, brand look comes before PLP and PDP. Roadmap rewritten as 22 small phases; README gains the PLP structure | specs/roadmap.md, tech-stack.md, mission.md, README.md |
 | 2026-11-14 | Finding changes a decision (§3.3): "ScooterBio event" | scooterbio.com is registered through Shopify on the dev store (can't pay renewals; no nameserver option). ScooterBio stays Headless like the other brands. Shopify's DNS settings allow a nameserver change, so: nameservers → Cloudflare now (fast), 20 email forwards → Cloudflare Email Routing, then transfer the registration to Cloudflare Registrar before it expires (Jan 25, 2027) | P1.8 unblocked once Cloudflare DNS is active |
 | 2026-11-14 | New request (§3.5) | Stripe checkout on bicyclebio.com now, test mode first (BicycleBio only); live keys only after a test order lands in Shopify | P2.4 runs on headless-bicyclebio ahead of M1 |
