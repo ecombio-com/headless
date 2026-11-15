@@ -1,44 +1,66 @@
 # Roadmap
 
-Part of the Headless constitution. `roadmap.md` = the order of work, in very small phases. `plan.md` = tasks, status and log. Brand proof lives in `specs/brands/<brand>/`.
-Each phase is a few sittings at most and ends with something you can see or check.
-Status marks: DONE✅ · IN PROGRESS⚠️ · NOT STARTED❌
+Legend: NOT STARTED❌  DONE✅  IN PROGRESS⚠️
+Timeline is relative: W0 = week of 2026-11-15. Each task is sized to about one working session.
+Statuses were seeded from commit history and this session; **verify** the brand-launch rows against production.
 
-## Done
-| # | Phase | Done when | Status |
-| --- | --- | --- | --- |
-| 0 | Codebase: Hydrogen ported to Next.js 16 on Cloudflare Workers | Build passes, deploys from GitHub | DONE✅ |
-| 1 | BicycleBio live (Stripe test mode) | check-brand 12/12, test order #1004 | DONE✅ |
-| 2 | Brand workflow + scripts (`docs/brand-launch.md`, `scripts/`) | A brand launches by copy-paste | DONE✅ |
-| 3 | SkaterBio live | check-brand 12/12, test order #1005 | DONE✅ |
+## Milestones
+| Milestone | Target | Status |
+|---|---|---|
+| M0 Foundations in place | W0 | DONE✅ |
+| M1 Customer sign-in shipped to one brand | W1 | IN PROGRESS⚠️ |
+| M2 Type-clean build and CI gate | W2 | NOT STARTED❌ |
+| M3 Sign-in live on all three brands | W3 | NOT STARTED❌ |
+| M4 Checkout ready for live mode | W5 | NOT STARTED❌ |
 
-## Next, in order
-| # | Phase | Done when | Status |
-| --- | --- | --- | --- |
-| 4 | ScooterBio: Shopify lets go of www (remove dev-store subdomains) | www.scooterbio.com shows the Worker | IN PROGRESS⚠️ |
-| 5 | ScooterBio: Stripe webhook on www, hardening, check, test order | check-brand 0 failed, test order in Shopify | NOT STARTED❌ |
-| 6 | ScooterBio: registration → Cloudflare Registrar, 20 email forwards → Email Routing | Root serves the Worker; email still arrives | NOT STARTED❌ |
-| 7 | Clean-up of the 3 launches: cancel test orders, bikes ship ("physical product"), remove trade-in links | Orders list clean; no trade-in anywhere | NOT STARTED❌ |
-| 8 | Brand look 1: brand registry holds name, logo, colors per brand | Each brand shows its own name and logo | NOT STARTED❌ |
-| 9 | Brand look 2: menus from Shopify (`<brand>-main`, `<brand>-footer`) per brand | No e-bike menu on SkaterBio or ScooterBio | NOT STARTED❌ |
-| 10 | Brand look 3: own header and footer for SkaterBio and ScooterBio | Each brand has its own layout | NOT STARTED❌ |
-| 11 | Brand look 4: home page per brand (hero, hubs, deals from `<brand>-all`) | Home shows only that brand's products | NOT STARTED❌ |
-| 12 | PLP 1: brand scope on /collections/all, search and sitemap | No other brand's products listed | NOT STARTED❌ |
-| 13 | PLP 2: hub pages per brand (tiles, hero, deals, guides) | Each brand's hubs render with their own metafields | NOT STARTED❌ |
-| 14 | PLP 3: filters, sort, empty state, product cards (badge, specs, stars) | README PLP checklist passes on 375px and 1440px | NOT STARTED❌ |
-| 15 | Speed: persistent cache + Workers Paid; one Yotpo call per page | No "Too many subrequests" in `wrangler tail` | NOT STARTED❌ |
-| 16 | PDP 1: read `pdp.*` metafields (P3.0) | Specs, FAQ, variants show from `pdp.*` | NOT STARTED❌ |
-| 17 | PDP 2: step picker, recap sheets, banner, badges, variant URLs (P3.1) | Matches the Hydrogen PDP | NOT STARTED❌ |
-| 18 | Customer sign-in on every brand domain (P1.4) | Sign in, orders, sign out on each brand | NOT STARTED❌ |
-| 19 | Quality: error pages, security headers, noindex on non-brand hosts | checklist C5, D2, D4 closed | NOT STARTED❌ |
-| 20 | Search on Algolia (index per brand from the live store) | Search and filters served by Algolia | NOT STARTED❌ |
-| 21 | Go live: Stripe live keys + live webhooks, rotate every key | One real order and refund per brand | NOT STARTED❌ |
-| 22 | Watch two weeks: `wrangler tail`, Search Console, GA4 | Two clean weeks on all three brands | NOT STARTED❌ |
+## Phase 0: Foundations (project: platform)
+| Task | Sub-task | Timeline | Status |
+|---|---|---|---|
+| 0.1 Spec Kit adopted | Constitution v1.0.0, README spec | before W0 | DONE✅ |
+| 0.2 Multi-brand Workers | One Worker per brand; BicycleBio, ScooterBio, SkaterBio launched (**verify** live) | before W0 | DONE✅ |
+| 0.3 Stripe checkout in test mode | Webhook route, checkout-kit | before W0 | DONE✅ |
+| 0.4 Env hygiene | Untrack `.env.*`, ignore rule, audit history (no secrets found) | W0 | DONE✅ |
+| 0.5 Tooling cleanup | Remove stray agent skill folders from the failed install | W0 | DONE✅ |
 
-## Later
-- Blogs and pages per brand (README "Blogs", "Pages").
-- Remove the compat layer and generated routes (P6.1); clean unused metafields (P6.3).
-- Brand email for every brand (P6.4).
+## Phase 1: Customer sign-in (project: auth)
+| Task | Sub-task | Timeline | Status |
+|---|---|---|---|
+| 1.1 Email + password only | Minimal server, route, client, form | W0 | DONE✅ |
+| 1.2 Local verification | Sign-up and sign-in return 200 on local D1 | W0 | DONE✅ |
+| 1.3 Open and review PR | `feat/customer-sign-in` to `main` | W1 | IN PROGRESS⚠️ |
+| 1.4 Decide sign-up policy | `disableSignUp` yes/no; user creation path | W1 | NOT STARTED❌ |
+| 1.5 Decide cookie scope | Need `crossSubDomainCookies`? Test auth host vs storefront | W1 | NOT STARTED❌ |
+| 1.6 Remote migration, BicycleBio | Apply `0001_better_auth.sql` to remote D1 | W1 | NOT STARTED❌ |
+| 1.7 Secrets, BicycleBio | Run `set-auth-secrets.ps1`; remove unused Google/Brevo handling | W1 | NOT STARTED❌ |
+| 1.8 Deploy and smoke test | Sign up, sign in, sign out on `auth.bicyclebio.com` | W1 | NOT STARTED❌ |
+| 1.9 Roll out | Repeat 1.6 to 1.8 for ScooterBio, then SkaterBio | W3 | NOT STARTED❌ |
+| 1.10 Remove dead code | `googleEnabled` prop in `sign-in/page.tsx` | W2 | NOT STARTED❌ |
 
-## Holiday freeze
-- Nov 25 – Dec 1: no live-store changes during BFCM.
+## Phase 2: Type health (project: quality)
+| Task | Sub-task | Timeline | Status |
+|---|---|---|---|
+| 2.1 Diagnose 11 errors | Diff `storefrontapi.generated.d.ts`; find the cause | W2 | NOT STARTED❌ |
+| 2.2 Fix errors | `product-view.tsx`, `product.ts`, `product-cross-sell.ts` | W2 | NOT STARTED❌ |
+| 2.3 CI gate | Run `tsc --noEmit` on PRs | W2 | NOT STARTED❌ |
+| 2.4 Proxy migration | `middleware` to `proxy` on its own branch | W4 | NOT STARTED❌ |
+
+## Phase 3: Product page (project: storefront)
+| Task | Sub-task | Timeline | Status |
+|---|---|---|---|
+| 3.1 PDP metafields | Per `specs/P3.0-pdp-metafields.md` | W2 | IN PROGRESS⚠️ |
+| 3.2 PDP components | Recap, step picker, banner, reassurance, wishlist | W2 | IN PROGRESS⚠️ |
+| 3.3 Collection catalog view | `catalog-view.tsx` replacing `catalog.tsx` | W3 | IN PROGRESS⚠️ |
+| 3.4 Sitemap XSL | `sitemap.xsl` route and format | W3 | IN PROGRESS⚠️ |
+
+## Phase 4: Checkout readiness (project: commerce)
+| Task | Sub-task | Timeline | Status |
+|---|---|---|---|
+| 4.1 Test-mode end-to-end | Order placed, webhook received, Shopify order created | W4 | NOT STARTED❌ |
+| 4.2 Live-mode checklist | Keys, webhook endpoint, refunds, tax and shipping | W5 | NOT STARTED❌ |
+| 4.3 Monitoring | Webhook failures, error alerts | W5 | NOT STARTED❌ |
+
+## Phase 5: New brands (project: platform)
+| Task | Sub-task | Timeline | Status |
+|---|---|---|---|
+| 5.1 Launch checklist rehearsal | Dry run of `docs/brand-launch.md` on a scratch brand | W6 | NOT STARTED❌ |
+| 5.2 Brand validation docs | Fill each `specs/brands/<brand>/validation.md` | W6 | NOT STARTED❌ |
