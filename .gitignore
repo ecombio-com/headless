@@ -17,3 +17,6 @@ search-baseline
 
 # Claude Code: keep shared skills, ignore personal settings
 .claude/settings.local.json
+
+.env.*
+!.env.example
