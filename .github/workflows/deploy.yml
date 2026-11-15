@@ -7,8 +7,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false # one brand failing never stops the others
       matrix:
-        brand: [bicyclebio]
+        # Add a brand here only at its launch step (docs/brand-launch.md, step 6)
+        brand: [bicyclebio, skaterbio]
     environment: ${{ matrix.brand }}
     steps:
       - uses: actions/checkout@v4

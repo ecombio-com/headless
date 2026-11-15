@@ -36,6 +36,24 @@
 			],
 			"services": [{"binding": "WORKER_SELF_REFERENCE", "service": "headless-bicyclebio"}],
 			"images": {"binding": "IMAGES"}
+		},
+		"skaterbio": {
+			"name": "headless-skaterbio",
+			"routes": [
+				{"pattern": "skaterbio.com", "custom_domain": true},
+				{"pattern": "www.skaterbio.com", "custom_domain": true}
+			],
+			"services": [{"binding": "WORKER_SELF_REFERENCE", "service": "headless-skaterbio"}],
+			"images": {"binding": "IMAGES"}
+		},
+		"scooterbio": {
+			"name": "headless-scooterbio",
+			"routes": [
+				{"pattern": "scooterbio.com", "custom_domain": true},
+				{"pattern": "www.scooterbio.com", "custom_domain": true}
+			],
+			"services": [{"binding": "WORKER_SELF_REFERENCE", "service": "headless-scooterbio"}],
+			"images": {"binding": "IMAGES"}
 		}
 	}
 }

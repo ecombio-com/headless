@@ -11,6 +11,17 @@ Next.js 16 App Router, React 19, Tailwind 4, pnpm. Ported from the Hydrogen repo
 - Run `pnpm typecheck` and `pnpm build` before pushing. Don't push after every small change.
 - Terminal: Windows PowerShell.
 
+## Constitution (read first)
+- `specs/mission.md` (why), `specs/tech-stack.md` (how), `specs/roadmap.md` (when). Every spec and change must fit them; changing them is a plan.md §3 re-plan.
+- Brand launches follow `docs/brand-launch.md`.
+
+## plan.md (required)
+- `plan.md` is the source of truth for the launch. Read §0 Rules at the start of every session.
+- Every change updates `plan.md`: item status, a line in §7 Update log, and §6 if a decision changed.
+- A feature is done (`[x]`) only after it passes the §2 Validation gate; until then it stays `[v]`.
+- When a §3 re-planning trigger fires, stop, re-plan in `plan.md`, then continue.
+- plan = implementation, `specs/` = specification, `validation/` = test results. Write the spec before code; record a validation run before marking `[x]`. Templates: `specs/_template.md`, `validation/_template.md`.
+
 ## Commands
 - `pnpm dev` — local server on http://localhost:3000
 - `pnpm typecheck`, `pnpm build`
