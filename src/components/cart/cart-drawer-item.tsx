@@ -1,5 +1,6 @@
 'use client';
 import {CartForm, Image, Money} from '~/compat/hydrogen';
+import posthog from 'posthog-js';
 import type {CartLineUpdateInput} from '@shopify/hydrogen-react/storefront-api-types';
 import {MinusIcon, PlusIcon, Trash2Icon} from 'lucide-react';
 import type {ReactNode} from 'react';
@@ -127,6 +128,7 @@ export function CartDrawerItem({line}: {line: CartLine}) {
                 aria-label={COPY.decrease}
                 className={STEP_BUTTON}
                 disabled={isOptimistic || quantity <= 1}
+                onClick={() => posthog.capture('cart_quantity_changed', {direction: 'decrease', quantity: quantity - 1})}
               >
                 <MinusIcon className="size-3 shrink-0" />
               </button>
@@ -143,6 +145,7 @@ export function CartDrawerItem({line}: {line: CartLine}) {
                 aria-label={COPY.increase}
                 className={STEP_BUTTON}
                 disabled={isOptimistic || quantity >= MAX_QUANTITY}
+                onClick={() => posthog.capture('cart_quantity_changed', {direction: 'increase', quantity: quantity + 1})}
               >
                 <PlusIcon className="size-3 shrink-0" />
               </button>
@@ -158,6 +161,7 @@ export function CartDrawerItem({line}: {line: CartLine}) {
               type="submit"
               aria-label={COPY.remove}
               disabled={isOptimistic}
+              onClick={() => posthog.capture('cart_item_removed')}
               className="flex cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Trash2Icon className="size-4" />

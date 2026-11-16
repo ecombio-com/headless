@@ -1,5 +1,6 @@
 'use client';
 import {cn} from '~/lib/cn';
+import posthog from 'posthog-js';
 import {Mail} from 'lucide-react';
 import {useActionState, useId, useState} from 'react';
 import {subscribeToNewsletter, type NewsletterState} from './newsletter-action';
@@ -33,7 +34,11 @@ export function Newsletter({
       </div>
 
       <div className={cn('w-full', centered ? 'text-left' : 'md:max-w-md')}>
-        <form action={formAction} className="flex gap-2">
+        <form
+          action={formAction}
+          onSubmit={() => posthog.capture('newsletter_signup_submitted', {placement: variant})}
+          className="flex gap-2"
+        >
           <label htmlFor={inputId} className="sr-only">Email</label>
           <div className="relative flex-1">
             <input

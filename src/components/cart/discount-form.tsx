@@ -1,5 +1,6 @@
 'use client';
 import {CartForm} from '~/compat/hydrogen';
+import posthog from 'posthog-js';
 import {cn} from '~/lib/cn';
 import {Loader2, X} from 'lucide-react';
 import {useEffect, useState} from 'react';
@@ -52,7 +53,11 @@ export function DiscountForm({
             spellCheck={false}
             className="flex-1"
           />
-          <Button type="submit" disabled={isPending || !normalized || isDuplicate}>
+          <Button
+            type="submit"
+            disabled={isPending || !normalized || isDuplicate}
+            onClick={() => posthog.capture('discount_submitted')}
+          >
             {isPending ? (
               <Loader2 className="size-4 animate-spin" aria-hidden="true" />
             ) : (

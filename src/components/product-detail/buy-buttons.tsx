@@ -1,5 +1,6 @@
 'use client';
 import {CartForm} from '~/compat/hydrogen';
+import posthog from 'posthog-js';
 import {useSiteOptional} from '~/components/layout/site-context';
 import {cn} from '~/lib/cn';
 import {Loader2, MinusIcon, PlusIcon} from 'lucide-react';
@@ -150,7 +151,14 @@ export function BuyButtons({
               <button
                 type="submit"
                 disabled={disabled}
-                onClick={() => open('cart')}
+                onClick={() => {
+                  posthog.capture('product_added_to_cart', {
+                    variant_id: selectedVariant.id,
+                    quantity,
+                    purchase_type: selectedPlan ? 'subscription' : 'one_time',
+                  });
+                  open('cart');
+                }}
                 className="inline-flex h-12 min-w-0 flex-1 cursor-pointer items-center justify-center rounded-ds-md bg-black text-ds-regular font-semibold text-white hover:bg-black/85 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {text}
@@ -173,6 +181,10 @@ export function BuyButtons({
               event.preventDefault();
               return;
             }
+            posthog.capture('express_checkout_started', {
+              variant_id: selectedVariant.id,
+              quantity,
+            });
             setIsBuyingNow(true);
           }}
           rel="nofollow"
