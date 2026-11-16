@@ -1,5 +1,6 @@
 'use client';
 import {cn} from '~/lib/cn';
+import posthog from 'posthog-js';
 import {Loader2} from 'lucide-react';
 import {useEffect, useState, type MouseEvent} from 'react';
 import {useSiteOptional} from '~/components/layout/site-context';
@@ -39,6 +40,7 @@ export function CartCheckout({checkoutUrl, hasLines}: {checkoutUrl?: string; has
 
   const startRedirect = (event: MouseEvent) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    posthog.capture('checkout_started', {checkout_method: 'shopify'});
     setIsRedirecting(true);
   };
 
@@ -63,6 +65,7 @@ export function CartCheckout({checkoutUrl, hasLines}: {checkoutUrl?: string; has
       aria-label={COPY.checkoutLabel}
       onClick={(event) => {
         if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+        posthog.capture('checkout_started', {checkout_method: 'stripe'});
         setIsRedirecting(true);
       }}
       className={cn(buttonVariants(), 'h-12 w-full justify-center')}

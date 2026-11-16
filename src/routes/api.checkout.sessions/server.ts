@@ -1,8 +1,9 @@
 // Ported from api.checkout.sessions.tsx by scripts/split-route.mjs.
+import {after} from 'next/server';
 import type {ActionFunctionArgs} from '~/compat/router';
 import {VERSIONS} from '~/lib/versions';
 import {allowedOrigins, createCheckoutSession, type SessionInput} from '~/lib/checkout-session.server';
-
+import {flushPostHogLogs, logCheckoutSession} from '~/instrumentation';
 
 export function loader() {
   return new Response('Method not allowed', {status: 405});
@@ -27,6 +28,12 @@ export async function action({request, context}: ActionFunctionArgs) {
   } catch {
     return new Response(JSON.stringify({error: 'bad json'}), {status: 400, headers});
   }
+  logCheckoutSession('Checkout session request accepted', {route: 'api_checkout_sessions'});
   const result = await createCheckoutSession(context.storefront as any, env, input);
+  logCheckoutSession('Checkout session request completed', {
+    route: 'api_checkout_sessions',
+    response_status: result.status,
+  });
+  after(() => flushPostHogLogs());
   return new Response(JSON.stringify(result.body), {status: result.status, headers});
 }

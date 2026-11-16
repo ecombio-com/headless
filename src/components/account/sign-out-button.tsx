@@ -1,3 +1,6 @@
+'use client';
+
+import posthog from 'posthog-js';
 import {cn} from '~/lib/cn';
 import {Form} from '~/compat/router';
 import {buttonVariants} from '~/components/ui/button';
@@ -7,6 +10,10 @@ export function SignOutButton() {
     <Form method="POST" action="/account/logout">
       <button
         type="submit"
+        onClick={() => {
+          posthog.capture('account_signed_out');
+          posthog.reset();
+        }}
         className={cn(buttonVariants({size: 'sm', variant: 'outline'}), 'w-full justify-center')}
       >
         Sign out

@@ -1,6 +1,7 @@
 'use client';
 // Ported from ($locale).account.profile.tsx by scripts/split-route.mjs.
 import type {action} from './server';
+import posthog from 'posthog-js';
 import {cn} from '~/lib/cn';
 import type {CustomerFragment} from 'customer-accountapi.generated';
 import {Form, useActionData, useNavigation, useOutletContext} from '~/compat/router';
@@ -30,7 +31,7 @@ export default function AccountProfile() {
     <>
       <AccountPageHeader title="Profile" description="Manage your personal details." />
       <AccountCard title="Personal information">
-        <Form method="PUT" className="grid gap-4">
+        <Form method="PUT" onSubmit={() => posthog.capture('profile_update_submitted')} className="grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="grid gap-1.5">
               <label className={LABEL} htmlFor="firstName">

@@ -1,5 +1,6 @@
 'use client';
 import {CartForm} from '~/compat/hydrogen';
+import posthog from 'posthog-js';
 import {Check} from 'lucide-react';
 import {useEffect, useState} from 'react';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
@@ -104,6 +105,11 @@ export function CardAddToCart({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              posthog.capture('product_added_to_cart', {
+                product_id: product.id,
+                variant_id: variantId,
+                quantity: 1,
+              });
               setAdded(true);
               open('cart');
               e.currentTarget.form?.requestSubmit(e.currentTarget);

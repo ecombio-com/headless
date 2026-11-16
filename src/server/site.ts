@@ -11,6 +11,16 @@ import {stripeCheckoutEnabled} from '~/lib/stripe-checkout';
 import {getLocaleFromRequest} from '~/core/config/i18n';
 import {createAppContext, getServerRequest} from './context';
 
+const CUSTOMER_ANALYTICS_IDENTITY_QUERY = `#graphql
+  query CustomerAnalyticsIdentity {
+    customer {
+      id
+      firstName
+      lastName
+    }
+  }
+` as const;
+
 /** One AppContext per request, shared by layouts, pages and generateMetadata. */
 export const getRequestContext = cache(async () => createAppContext(await getServerRequest()));
 
@@ -20,9 +30,28 @@ export const loadSite = cache(async () => {
     console.error(error);
     return null;
   });
+  const isLoggedIn = customerAccount.isLoggedIn().catch(() => false);
+  const posthogUser = await isLoggedIn.then(async (loggedIn) => {
+    if (!loggedIn) return null;
+
+    try {
+      const {data, errors} = await customerAccount.query(CUSTOMER_ANALYTICS_IDENTITY_QUERY);
+      const customer = data?.customer;
+      if (errors?.length || typeof customer?.id !== 'string') return null;
+
+      return {
+        id: customer.id,
+        firstName: typeof customer.firstName === 'string' ? customer.firstName : undefined,
+        lastName: typeof customer.lastName === 'string' ? customer.lastName : undefined,
+      };
+    } catch {
+      return null;
+    }
+  });
   return {
     cart: cartPromise,
-    isLoggedIn: customerAccount.isLoggedIn().catch(() => false),
+    isLoggedIn,
+    posthogUser,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
     checkoutMode: stripeCheckoutEnabled(env) ? ('stripe' as const) : ('shopify' as const),
     brand: storefrontConfig.brand,

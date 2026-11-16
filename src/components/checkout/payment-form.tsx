@@ -1,5 +1,6 @@
 'use client';
 import {useEffect, useRef, useState} from 'react';
+import posthog from 'posthog-js';
 import {useNavigate} from '~/compat/router';
 import {loadStripe, type Stripe, type StripeElements} from '@stripe/stripe-js';
 import {Lock} from 'lucide-react';
@@ -50,6 +51,7 @@ export function PaymentForm({publishableKey, clientSecret, total}: {publishableK
     const stripe = stripeRef.current;
     const elements = elementsRef.current;
     if (!stripe || !elements) return;
+    posthog.capture('payment_submitted');
     setBusy(true);
     setError(null);
     const {error, paymentIntent} = await stripe.confirmPayment({
@@ -57,8 +59,11 @@ export function PaymentForm({publishableKey, clientSecret, total}: {publishableK
       confirmParams: {return_url: `${window.location.origin}/payment/complete`},
       redirect: 'if_required',
     });
-    if (error) setError(error.message ?? 'Payment failed.');
-    else if (paymentIntent) {
+    if (error) {
+      posthog.capture('payment_failed', {error_type: error.type});
+      setError(error.message ?? 'Payment failed.');
+    } else if (paymentIntent) {
+      posthog.capture('payment_completed');
       navigate(`/payment/complete?payment_intent=${paymentIntent.id}`);
       return;
     }
