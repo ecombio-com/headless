@@ -2,7 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
 	"name": "headless",
-  "keep_vars": true,
+	"keep_vars": true,
 	"compatibility_date": "2026-11-14",
 	"compatibility_flags": [
 		"nodejs_compat",
@@ -35,7 +35,14 @@
 				{"pattern": "www.bicyclebio.com", "custom_domain": true}
 			],
 			"services": [{"binding": "WORKER_SELF_REFERENCE", "service": "headless-bicyclebio"}],
-			"images": {"binding": "IMAGES"}
+			"images": {"binding": "IMAGES"},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "headless-auth-bicyclebio",
+					"database_id": "037a08c9-8ecc-4877-8d37-077d24faa28a"
+				}
+			]
 		},
 		"skaterbio": {
 			"name": "headless-skaterbio",
@@ -44,7 +51,14 @@
 				{"pattern": "www.skaterbio.com", "custom_domain": true}
 			],
 			"services": [{"binding": "WORKER_SELF_REFERENCE", "service": "headless-skaterbio"}],
-			"images": {"binding": "IMAGES"}
+			"images": {"binding": "IMAGES"},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "headless-auth-skaterbio",
+					"database_id": "97d9b063-4107-4f29-b4b7-67d682e76d81"
+				}
+			]
 		},
 		"scooterbio": {
 			"name": "headless-scooterbio",
@@ -53,7 +67,14 @@
 				{"pattern": "www.scooterbio.com", "custom_domain": true}
 			],
 			"services": [{"binding": "WORKER_SELF_REFERENCE", "service": "headless-scooterbio"}],
-			"images": {"binding": "IMAGES"}
+			"images": {"binding": "IMAGES"},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "headless-auth-scooterbio",
+					"database_id": "cff24ca6-774a-4838-b245-368093490159"
+				}
+			]
 		}
 	}
 }
