@@ -74,4 +74,5 @@ Candidates are mapped from the current repo; confirm each during the content aud
 - Editor roles and, if SAML 2.0/OIDC SSO is required, confirm it is available on the Sanity plan
 - Sanity MCP configured for Claude Code; AGENTS.md, DESIGN.md and README.md kept current
 - Working Git for Windows (HTTPS remote helper) so agent skills can install
+- With pnpm, declare every imported package as a direct dependency (strict node_modules), e.g. @sanity/icons
 - Backups: scheduled `sanity dataset export` per dataset

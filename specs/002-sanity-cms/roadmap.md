@@ -24,8 +24,10 @@ Sanity CMS for BicycleBio, ScooterBio and SkaterBio headless storefronts (Shopif
 | 0.4 | Step 1: Initialize template | `pnpm create sanity@latest` into Apps\CMS (TypeScript, MCP for Claude Code) | DONE✅ |
 | 0.5 | Step 2: Environment variables | .env.local created by init; Live Preview token generated | DONE✅ |
 | 0.6 | Step 3: Install and run | `pnpm install` done; dev server starts; verify :3000 and :3000/admin | IN PROGRESS⚠️ |
-| 0.7 | Step 4: Seed content | Query `site`/`page` docs; import demo dataset if empty; publish `site` and `page` "index" | IN PROGRESS⚠️ |
-| 0.8 | Token hygiene | Revoke token exposed in terminal output; recreate unseen for the storefront | IN PROGRESS⚠️ |
+| 0.7 | Step 4: Seed content | Query `site`/`page` docs; import demo dataset if empty; publish `site` and `page` "index" | DONE✅ |
+| 0.8 | Token hygiene | Revoke token exposed in terminal output; recreate unseen during task 1.2 | DONE✅ |
+| 0.9 | Fix Studio /admin 500 | Declare @sanity/icons as a direct dependency (pnpm strict); restart dev; /admin returns 200 | IN PROGRESS⚠️ |
+| 0.10 | Repair Git | One Git install only (Program Files or Scoop); fetch and push work; install Sanity agent skills | IN PROGRESS⚠️ |
 
 ## Phase 1: Storefront integration (Nov 19-25) -> M2
 | ID | Task | Sub-tasks | Status |
@@ -67,3 +69,5 @@ Sanity CMS for BicycleBio, ScooterBio and SkaterBio headless storefronts (Shopif
 - Template ships Vercel/Netlify deploy widgets; Cloudflare path needs custom work (3.1).
 - Dual content sources during migration; mitigate with feature flags and fallbacks (2.5).
 - Git HTTPS remote helper fails in some child processes (libcurl-4.dll); blocks agent skills install (3.5).
+- Studio /admin fails until @sanity/icons is a direct dependency (pnpm strict resolution).
+- Two Git installs on PATH (Program Files and Scoop) caused mixed-version failures.
