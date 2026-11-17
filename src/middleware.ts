@@ -5,12 +5,43 @@ import {localeRedirect} from '~/core/config/i18n';
 const HOOKS_HOST = 'hooks.ecombio.com';
 const HOOKS_ALLOWED_PREFIXES = ['/api/webhooks', '/api/revalidate-menus', '/api/revalidate-product', '/api/cron', '/api/yotpo/webhook'];
 
+export const BRAND_BY_HOST: Record<string, string> = {
+  'ecombio.com': 'ecombio',
+  'www.ecombio.com': 'ecombio',
+  'bicyclebio.com': 'bicyclebio',
+  'www.bicyclebio.com': 'bicyclebio',
+  'scooterbio.com': 'scooterbio',
+  'www.scooterbio.com': 'scooterbio',
+  'skaterbio.com': 'skaterbio',
+  'www.skaterbio.com': 'skaterbio',
+};
+
+function brandFromHostname(hostname: string | null | undefined): string | null {
+  if (!hostname) return null;
+  const normalized = hostname.toLowerCase().replace(/:\d+$/, '');
+  return BRAND_BY_HOST[normalized] ?? null;
+}
+
+function rewriteToBrandPath(request: NextRequest, brand: string): NextResponse {
+  const nextUrl = request.nextUrl.clone();
+  const {pathname} = nextUrl;
+
+  const payload = pathname === `/${brand}` ? '/' : pathname.startsWith(`/${brand}/`) ? pathname.slice(brand.length + 1) || '/' : pathname;
+  nextUrl.pathname = `/${brand}${payload === '/' ? '' : payload}`;
+
+  const headers = new Headers(request.headers);
+  headers.set('x-url', request.url);
+  return NextResponse.rewrite(nextUrl, {request: {headers}});
+}
+
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
   const {pathname} = url;
+  const hostname = request.headers.get('host')?.split(':')[0].toLowerCase() ?? url.hostname.toLowerCase();
+  const onHooksHost = hostname === HOOKS_HOST;
+  const brand = brandFromHostname(hostname);
 
   // The hooks host serves only webhook paths, never the store.
-  const onHooksHost = request.headers.get('host')?.split(':')[0].toLowerCase() === HOOKS_HOST;
   if (onHooksHost && !HOOKS_ALLOWED_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
     return new NextResponse('Not Found', {status: 404, headers: {'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex'}});
   }
@@ -29,6 +60,15 @@ export function middleware(request: NextRequest) {
   // Server Components can't see the URL: forward it.
   const headers = new Headers(request.headers);
   headers.set('x-url', request.url);
+
+  if (!onHooksHost && !pathname.startsWith('/api/') && brand) {
+    const nextPath = pathname === `/${brand}` ? '/' : pathname.startsWith(`/${brand}/`) ? pathname.slice(brand.length + 1) || '/' : pathname;
+    const normalized = `/${brand}${nextPath === '/' ? '' : nextPath}`;
+    const target = url.clone();
+    target.pathname = normalized;
+    return NextResponse.rewrite(target, {request: {headers}});
+  }
+
   return NextResponse.next({request: {headers}});
 }
 
